@@ -134,7 +134,8 @@ data/plots.csv            # one row per lot on the working grid
 data/qa-issues.csv        # parse failures, conflicts, numbering flags
 web/index.html            # interactive map; open it from a local web server
 web/cemetery.json         # map data, rewritten by scripts/build_dataset.py
-print/                    # PDF map generator and its output
+scripts/build_pdf.py       # rebuilds the printable map from the CSVs
+print/chevra-ahavas-chesed.pdf
 ```
 
 Create `data/`, `web/`, and `print/` when that phase starts. Generated files should be reproducible from the CSV and the source image.
