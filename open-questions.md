@@ -6,6 +6,50 @@ Add new items at the bottom. When an item is answered, write the answer undernea
 
 Working assumptions stay assumptions until a visit or Stanley confirms them.
 
+## Assumptions for the first CSV and maps
+
+These are in force for `data/`, `web/`, and `print/`. None of them is confirmed on the ground. The maps are a first schematic.
+
+1. **Row 1 faces the entrance.** "Each block" is read as each field. Row 1 is the row closest to the Liberty Road entrance. Row 2 is the next row away from the entrance, then row 3. Every field, including KK and LLL, is drawn with three rows. On the maps, row 1 is the top of the field and the top of the page is the entrance side.
+
+2. **Lot 1 is on the left.** Lots increase left to right when row 1 is at the top. Walking in from Liberty Road, the Shaari Zion side is on the left and Beth El is on the right, so this puts lot 1 toward Shaari Zion. The lists do not say which end is lot 1. Question 5.
+
+3. **Single letters run from A at the entrance to S at the far end,** on the Shaari Zion side, in alphabetical order. That part matches the labels on `cemetery map.png`. The photo's blue band is A–J and the green band continues with K–S. Fields T–Z are not drawn.
+
+4. **KK is drawn just after JJ, and LLL just after KKK.** You asked for KK between JJ and AAA, and LLL after KKK. The photo shows three bands beside each other in the far half of the cemetery: singles K–S, doubles AA–JJ, triples AAA–KKK, with AA beside AAA and JJ beside KKK. The first map keeps those bands. KK is added at the far end of the double-letter band, after JJ. LLL is added at the far end of the triple-letter band, after KKK. AAA stays where the photo labels it, beside AA, so KK is not drawn as AAA's neighbor. If KK should instead sit on a path that has JJ on one side and AAA on the other, the overview is wrong. Question 6.
+
+5. **Row lengths, used as the grid even where a visit may find more empty lots.** Numbering restarts at 1 each row, except J–O.
+
+   | Fields | Lots per row | Numbering |
+   | --- | --- | --- |
+   | A | 14 | restarts |
+   | B, C | 12 | restarts |
+   | D | 13 | restarts |
+   | E, F | 14 | restarts |
+   | G, H | 16 | restarts |
+   | I | 15 | restarts |
+   | J, K | 14 | continuous: 1–14, 15–28, 29–42 |
+   | L, M, N, O | 16 | continuous: 1–16, 17–32, 33–48 |
+   | P, Q, R, S | 18 | restarts |
+   | AA–JJ and KK | 14 | restarts |
+   | AAA–KKK and LLL | 14 | restarts |
+
+   Stanley's 18 and 14 are what P–S and the double- and triple-letter fields follow. A–O follow the lengths the master list actually uses. Questions 2 and 4.
+
+6. **A burial is drawn only when its lot sits in that row's block.** In J–O the printed row is kept, and it is drawn when the lot number falls in that row's range above. Esther Birnbaum (`J 2 3`) and Hans Morgenroth (`J 3 24A`) fall outside those blocks. They stay in the CSV and appear as "not on the working grid," not as extra squares. The same treatment is used for Max Bodenheimer at HH row 2 lot 19, and for anyone else whose lot is outside the width. Questions 3 and 10.
+
+7. **Natalie Greenfield is drawn at JJ row 1 lot 11. Susan Roedel is drawn at S row 1 lot 15.** The master-list coordinates (J row 1 lot 11 and J row 1 lot 15) are kept on the row and are not drawn. Where the two lists give different years, the later list's full date is the one stored as `date_iso`, and the master date stays in the notes. Greenfield is 2021-10-13 on the map; the master list says 10/13/20. Question 1.
+
+8. **When the two lists name one person and disagree, the 2020–2026 list supplies the map location.** Both original lines stay on the CSV row. A match requires the same first and last name. A parenthetical nickname does not block it. Names that differ by a letter are left as two rows.
+
+9. **A letter suffix is a second burial drawn on that same lot,** marked with the letter. It does not add a new column. Empty "A" lots are not invented. Two unsuffixed names on one lot share the cell. Question 8 and question 9.
+
+10. **An empty square means the lists have no burial there.** Nothing is marked reserved. Question 7.
+
+11. **Rosedale, King David, "buried elsewhere," and rows with no field are in the CSV and off the grave map.**
+
+12. **Master-list years 50–99 are 1950–1999. Years 00–49 stay undated** in `date_iso` unless the later list dates that person. Partial dates stay out of `date_iso`.
+
 ## 1. Natalie Greenfield and Susan Roedel in field J
 
 - Status: open
@@ -72,14 +116,14 @@ Also confirm there are three rows and no fourth.
 
 ## 5. Which end of a row is lot 1, and which side of a field is row 1?
 
-- Status: open
+- Status: open. The first map assumes an answer for row 1 only. See the assumptions at the top.
 - How to answer: visit. The source photo shows field bands only. It does not show the direction of the numbers.
 
 Stand in one field whose occupants we trust, such as field A or field L, and record which physical end is lot 1 and which side is row 1. One confident example is enough if the cemetery uses the same direction everywhere. If a field breaks the pattern, note that field.
 
 ## 6. Where are fields KK and LLL?
 
-- Status: open
+- Status: open. The first map places KK after JJ and LLL after KKK, on the photo's parallel bands. See assumption 4.
 - How to answer: visit, or Stanley if he has a current field diagram.
 
 Neither field is labeled on `cemetery map.png`. LLL was added after that image. KK appears only in the 2025–2026 burials (the master list stops at JJ and KKK). The later list uses both, so the graves exist. We need the walk order: KK relative to JJ, LLL relative to KKK, and whether each row has 14 lots.

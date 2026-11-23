@@ -194,13 +194,13 @@ The master list's printed total is 1,545 Chevra names as of 12/22/2022. The QA r
 2. Parse the recent PDF. Normalize the location phrases above. Keep elsewhere and missing-location rows.
 3. Match overlapping people from 2020 onward.
 4. Write `data/burials.csv` and `data/qa-issues.csv`.
-5. Stop and review the QA file before building `plots.csv` or any map. List every lot in fields J–O that is greater than 18, and every KK or LLL burial.
+5. Review `data/qa-issues.csv`. Off-grid lots and list conflicts stay visible. They do not block the first schematic.
 
 ### Phase 2 — Plot grid
 
-1. Confirm with Stanley: row count, the J–O numbering, where lot 1 sits in a row, which side row 1 is on, where KK and LLL are, and which empty lots are reserved.
-2. Write `data/plots.csv` for A–S, AA–JJ, and AAA–KKK using the row lengths in the lots section above, and three rows.
-3. Add KK and LLL only after their positions and sizes are confirmed.
+1. The first `data/plots.csv` uses the assumptions in `open-questions.md`, including three rows, the widths in that file, KK after JJ, and LLL after KKK.
+2. Replace a width or a placement when a visit answers the matching question. Rebuild the CSV and both maps from the script.
+3. One burial per lot is the normal case. Shared lots and letter suffixes stay on the plot and in the QA file.
 4. Join burials onto plots. One burial per lot. Conflicts go to QA and stay visible in the app.
 
 ### Phase 3 — Interactive map
@@ -224,9 +224,13 @@ A multi-page PDF in `print/`:
 - Empty lots stay on the map and stay visually quiet. Reserved lots use their own symbol.
 - The index includes Chevra burials. Elsewhere and Rosedale names can have a short separate list so they are omitted from the grave drawing.
 
+## First version
+
+`data/`, `web/`, and `print/` are a first schematic. The assumptions behind them are listed at the top of `open-questions.md`. They are not confirmed. When one of them is wrong, change the assumption in that file and rebuild. Do not silently treat the schematic as surveyed.
+
 ## Open questions
 
-The running list is `open-questions.md`. Add a new item there when the lists do not settle something. A cemetery visit is the way to answer most of them. Phase 2 waits on that list.
+The running list is `open-questions.md`. Add a new item there when the lists do not settle something. A cemetery visit is the way to answer most of them.
 
 ## Working rules
 
