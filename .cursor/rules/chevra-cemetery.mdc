@@ -5,7 +5,7 @@ alwaysApply: true
 
 # Chevra Ahavas Chesed
 
-Read `AGENTS.md` before editing data, the web map, or the PDF.
+Read `AGENTS.md` before editing data, the web map, or the PDF. Add unresolved items to `open-questions.md`, and record the answer there when one is found.
 
 ## Sources
 
@@ -14,7 +14,7 @@ Leave these bytes unchanged: `cemetery map.png`, `master list of departed poorly
 ## Order of work
 
 1. `data/burials.csv` and `data/qa-issues.csv`
-2. Confirm the open questions in `AGENTS.md`, then `data/plots.csv`
+2. Settle `open-questions.md`, then `data/plots.csv`
 3. Static map in `web/`
 4. Indexed PDF in `print/`
 
@@ -23,7 +23,8 @@ Leave these bytes unchanged: `cemetery map.png`, `master list of departed poorly
 - Single-letter fields: 18 lots per row. Double- and triple-letter fields: 14.
 - Working row count is 3. Ask before adding a row.
 - Fields in the master list: A–S, AA–JJ, AAA–KKK.
-- Fields J–O use lot numbers above 18. Keep the printed lot and record a QA issue. Leave those lots unrenumbered.
+- A–I restart each row. Lengths: A 14, B 12, C 12, D 13, E 14, F 14, G 16, H 16, I 15.
+- J–O do not restart. K is 14 per row (1–42). L–O are 16 per row (1–48). J matches K except a few stray lines. Keep the printed lot.
 - KK and LLL appear only in later records. Ask before drawing them.
 - Lot status is `occupied`, `empty`, or `reserved`. Use `reserved` only when Stanley or the cemetery named that lot.
 

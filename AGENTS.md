@@ -76,7 +76,29 @@ The lists show three rows (1, 2, and 3) in every field that has enough burials t
 
 Stanley's cap fits the double-letter fields, the triple-letter fields, and single-letter fields P, Q, R, and S (max lot 18, numbering restarts each row). One recorded exception: HH row 2 lot 19.
 
-Fields A through I mostly restart each row and stay at or under 18. Fields J through O do not. In L, M, and N the maxima are about 16, 32, and 48 for rows 1, 2, and 3, which looks like one numbering sequence running through the field (about 16 lots per row) rather than a restart at 1. J, K, and O are similar and less tidy. Keep the printed lot and flag it in the QA file. Do not renumber those lots to 1–18.
+Fields A through I restart each row at 1. The highest lot number is the row length, and it is shorter than 18. Several rows are filled from 1 through that number, so the unused tail is not a hidden run of lots out to 18.
+
+| Field | Lots per row | Numbered plots (3 rows) |
+| --- | --- | --- |
+| A | 14 | 42 |
+| B | 12 | 36 |
+| C | 12 | 36 |
+| D | 13 | 39 |
+| E | 14 | 42 |
+| F | 14 | 42 |
+| G | 16 | 48 |
+| H | 16 | 48 |
+| I | 15 | 45 |
+
+That is 378 numbered plots. A letter suffix (`10A`, `1A`) is an extra grave beside that number. Those extras are concentrated in B (7), with a few in C, D, E, and F. A handful of numbers also carry two unsuffixed names.
+
+Fields J through O do not restart. Each row continues the previous row's numbers.
+
+- K is 14 per row and continuous: row 1 is 1–14, row 2 is 15–28, row 3 is 29–42. No number is shared across rows. Lots 2 and 33 are empty. Suffix graves: 14A, 15A, 28A, 29A.
+- L, M, N, and O are 16 per row and continuous: 1–16, 17–32, 33–48. L fills all 48. M is missing 22 and has 12A. N is missing 46. O fills 1–47, so only 48 is absent.
+- J is the same 14-wide continuous shape, and it is the messy one. The working assumption, pending a visit, is that two master-list lines are mis-filed: Natalie Greenfield (the other name on J row 1 lot 11 is Julius Eick, and Olga Eick is lot 12; the 2020–2026 list puts Natalie at JJ row 1 lot 11) and Susan Roedel (she is the only name on J row 1 lot 15; the later list puts her at S row 1 lot 15). Nathan Prager is J row 2 lot 15, with Bertha Neuhof at 15A. Under that assumption row 1 is 1–14 plus 14A. Row 2 occupies 15–22 and 24–27, plus 15A, so 23 and 28 are empty, and it also contains Esther Birnbaum at lot 3, which is already Eugen Baer's lot on row 1. Row 3 is 29–42 plus 42A, and Hans Morgenroth at 24A, while lot 24 itself is on row 2. See `open-questions.md`.
+
+Keep the printed lot. The continuous fields are the map's numbering, not a sequence to fold back into 1–18.
 
 ### Empty and reserved lots
 
@@ -177,7 +199,7 @@ The master list's printed total is 1,545 Chevra names as of 12/22/2022. The QA r
 ### Phase 2 — Plot grid
 
 1. Confirm with Stanley: row count, the J–O numbering, where lot 1 sits in a row, which side row 1 is on, where KK and LLL are, and which empty lots are reserved.
-2. Write `data/plots.csv` for A–S, AA–JJ, and AAA–KKK using 18 or 14 lots and three rows.
+2. Write `data/plots.csv` for A–S, AA–JJ, and AAA–KKK using the row lengths in the lots section above, and three rows.
 3. Add KK and LLL only after their positions and sizes are confirmed.
 4. Join burials onto plots. One burial per lot. Conflicts go to QA and stay visible in the app.
 
@@ -204,13 +226,7 @@ A multi-page PDF in `print/`:
 
 ## Open questions
 
-These block Phase 2 and anything that draws a grave:
-
-1. For fields J through O, do lot numbers continue across rows, or were restarted row numbers copied down in a continuous sequence?
-2. Does every field have exactly three rows of 18 or 14 lots?
-3. Which end of a row is lot 1, and which side of a field is row 1?
-4. Where are KK and LLL, and do they follow the 14-lot rule?
-5. Which currently empty lots are reserved, and for whom?
+The running list is `open-questions.md`. Add a new item there when the lists do not settle something. A cemetery visit is the way to answer most of them. Phase 2 waits on that list.
 
 ## Working rules
 
