@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chevra Ahavas Chesed Cemetery</title>
+  <style>
+    :root {
+      --paper: #f4efe6;
+      --ink: #241f1a;
+      --muted: #5e564c;
+      --line: #d9d0c3;
+      --blue: #1d5c86;
+      --green: #2c6a3c;
+      --orange: #c05612;
+      --pink: #a33b62;
+      --occupied: #1e4630;
+      --empty: #fbf8f3;
+      --gold: #a67c2d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font: 16px/1.45 "Segoe UI", sans-serif;
+    }
+    header {
+      padding: 1.25rem 1.25rem 0.75rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .eyebrow {
+      margin: 0;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    h1 {
+      margin: 0.15rem 0 0.6rem;
+      font-family: Georgia, "Palatino Linotype", serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+    .banner {
+      margin: 0 0 0.8rem;
+      padding: 0.65rem 0.8rem;
+      background: #fff8e8;
+      border-left: 4px solid var(--gold);
+      color: var(--ink);
+      font-size: 0.92rem;
+    }
+    label { font-size: 0.85rem; color: var(--muted); }
+    input[type="search"] {
+      display: block;
+      width: min(36rem, 100%);
+      margin-top: 0.25rem;
+      padding: 0.55rem 0.7rem;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      font: inherit;
+      background: white;
+    }
+    #results {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.55rem;
+    }
+    #results button, .field-btn, .text-btn {
+      font: inherit;
+      cursor: pointer;
+    }
+    #results button {
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 999px;
+      padding: 0.25rem 0.7rem;
+      text-align: left;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 15rem 1fr;
+      min-height: calc(100vh - 12rem);
+    }
+    nav {
+      padding: 0.8rem;
+      border-right: 1px solid var(--line);
+    }
+    nav h2 {
+      margin: 0.8rem 0 0.3rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .field-btn {
+      display: inline-block;
+      min-width: 3rem;
+      margin: 0.15rem;
+      padding: 0.28rem 0.45rem;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      color: white;
+    }
+    .field-btn.assumed { border-style: dashed; border-color: white; }
+    .field-btn[aria-pressed="true"] { outline: 2px solid var(--ink); outline-offset: 1px; }
+    .single-early { background: var(--blue); }
+    .single-late { background: var(--green); }
+    .double { background: var(--orange); }
+    .triple { background: var(--pink); }
+    .text-btn {
+      display: block;
+      width: 100%;
+      margin-top: 0.8rem;
+      padding: 0.4rem 0.5rem;
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 4px;
+      text-align: left;
+    }
+    main { padding: 1rem 1.1rem 2rem; min-width: 0; }
+    .groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1rem; }
+    .group {
+      background: white;
+      border: 1px solid var(--line);
+      border-top: 6px solid var(--blue);
+      border-radius: 8px;
+      padding: 0.8rem;
+    }
+    .group.late { border-top-color: var(--green); }
+    .group.double { border-top-color: var(--orange); }
+    .group.triple { border-top-color: var(--pink); }
+    .group h3 { margin: 0 0 0.4rem; font-family: Georgia, serif; font-size: 1.05rem; }
+    .group p { margin: 0 0 0.5rem; color: var(--muted); font-size: 0.88rem; }
+    .grid-head { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
+    .grid-head h2 { margin: 0; font-family: Georgia, serif; }
+    .hint { color: var(--muted); font-size: 0.9rem; }
+    .rows { overflow-x: auto; padding-bottom: 0.4rem; }
+    .row { display: flex; gap: 0.4rem; margin: 0.4rem 0; align-items: stretch; }
+    .row-label {
+      flex: 0 0 4.2rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      padding-top: 0.35rem;
+    }
+    .cell {
+      flex: 0 0 5.6rem;
+      min-height: 4.6rem;
+      padding: 0.3rem 0.35rem;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--empty);
+      text-align: left;
+      font: inherit;
+      cursor: pointer;
+      color: var(--ink);
+    }
+    .cell.occupied { background: var(--occupied); color: white; border-color: var(--occupied); }
+    .cell.selected { outline: 3px solid var(--gold); outline-offset: 1px; }
+    .lot-no { display: block; font-size: 0.75rem; opacity: 0.8; }
+    .who { display: block; font-size: 0.78rem; font-weight: 650; }
+    .suffix-line { display: block; margin-top: 0.2rem; font-size: 0.72rem; }
+    #detail, .unplaced, .other-list {
+      margin-top: 1rem;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+    }
+    #detail h3, .unplaced h3 { margin: 0 0 0.3rem; font-family: Georgia, serif; }
+    .source { color: var(--muted); font-size: 0.85rem; white-space: pre-wrap; }
+    .legend { display: flex; gap: 1rem; margin: 0.4rem 0 0.8rem; font-size: 0.85rem; color: var(--muted); }
+    .swatch {
+      display: inline-block;
+      width: 0.8rem;
+      height: 0.8rem;
+      border-radius: 2px;
+      vertical-align: -1px;
+      margin-right: 0.25rem;
+      border: 1px solid var(--line);
+    }
+    .swatch.filled { background: var(--occupied); border-color: var(--occupied); }
+    @media (max-width: 800px) {
+      .layout { grid-template-columns: 1fr; }
+      nav { border-right: 0; border-bottom: 1px solid var(--line); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="eyebrow">Liberty Road</p>
+    <h1>Chevra Ahavas Chesed</h1>
+    <p class="banner">First schematic, not a survey. Row 1 is drawn toward the entrance. Lot 1 is on the left. KK is drawn after JJ, and LLL after KKK. An empty square has no name in the lists. It is not marked reserved.</p>
+    <label for="q">Find a person</label>
+    <input id="q" type="search" placeholder="Last name or first name" autocomplete="off">
+    <div id="results"></div>
+  </header>
+  <div class="layout">
+    <nav id="nav"></nav>
+    <main id="main"></main>
+  </div>
+  <script>
+    const resultsEl = document.querySelector("#results");
+    const navEl = document.querySelector("#nav");
+    const mainEl = document.querySelector("#main");
+    const searchEl = document.querySelector("#q");
+    let data = null;
+    let byId = {};
+    let selectedId = "";
+
+    function bandTitle(band) {
+      if (band === "single-early") return ["A–J", "Single letters along Shaari Zion, from the entrance.", "single-early"];
+      if (band === "single-late") return ["K–S", "Single letters continuing toward the far end.", "single-late"];
+      if (band === "double") return ["AA–KK", "Double letters. KK, after JJ, is assumed.", "double"];
+      return ["AAA–LLL", "Triple letters. LLL, after KKK, is assumed.", "triple"];
+    }
+
+    function peopleIn(ids) {
+      return ids.map((id) => byId[id]).filter(Boolean);
+    }
+
+    function dateLine(person) {
+      if (!person.date) return "Date of death not in the lists";
+      if (person.certainty === "assumed_century") {
+        return `${person.rawDate} in the list, read as ${person.date}`;
+      }
+      return person.date;
+    }
+
+    function placeLine(person) {
+      if (person.cemetery === "rosedale") return person.where || "Rosedale";
+      if (person.cemetery === "elsewhere") return person.notes || "Buried elsewhere";
+      if (person.cemetery === "unknown") return "No Chevra grave in the lists";
+      if (!person.onMap) {
+        const bits = [person.field, person.row && `row ${person.row}`, person.lot && `lot ${person.lot}`].filter(Boolean);
+        return bits.length ? `${bits.join(", ")} — not on the working grid` : "Not on the working grid";
+      }
+      return `Field ${person.field}, row ${person.row}, lot ${person.lot}`;
+    }
+
+    function showDetail(title, body) {
+      const box = document.createElement("section");
+      box.id = "detail";
+      const heading = document.createElement("h3");
+      heading.textContent = title;
+      box.appendChild(heading);
+      body.forEach((node) => box.appendChild(node));
+      return box;
+    }
+
+    function paragraph(text, className) {
+      const el = document.createElement("p");
+      if (className) el.className = className;
+      el.textContent = text;
+      return el;
+    }
+
+    function personDetail(person) {
+      const nodes = [
+        paragraph(dateLine(person)),
+        paragraph(placeLine(person)),
+      ];
+      if (person.other) nodes.push(paragraph(person.other));
+      if (person.hebrew) nodes.push(paragraph(person.hebrew));
+      if (person.notes) nodes.push(paragraph(person.notes));
+      if (person.master) nodes.push(paragraph(`Master list: ${person.master}`, "source"));
+      if (person.recent) nodes.push(paragraph(`2020–2026 list: ${person.recent}`, "source"));
+      return showDetail(person.name, nodes);
+    }
+
+    function renderOverview() {
+      mainEl.replaceChildren();
+      const intro = paragraph("Choose a field, or search for a name. The entrance is the Liberty Road end. A is at that end, and S, JJ, and KKK are toward the far end on the source photo.");
+      mainEl.appendChild(intro);
+      const groups = document.createElement("div");
+      groups.className = "groups";
+      ["single-early", "single-late", "double", "triple"].forEach((band) => {
+        const [title, copy, kind] = bandTitle(band);
+        const card = document.createElement("section");
+        card.className = `group ${kind === "single-late" ? "late" : kind === "single-early" ? "" : kind}`;
+        const heading = document.createElement("h3");
+        heading.textContent = title;
+        card.appendChild(heading);
+        card.appendChild(paragraph(copy));
+        data.fields.filter((field) => field.band === band).forEach((field) => {
+          card.appendChild(fieldButton(field));
+        });
+        groups.appendChild(card);
+      });
+      mainEl.appendChild(groups);
+      const drawn = data.people.filter((person) => person.onMap).length;
+      const others = data.people.filter((person) => person.cemetery !== "chevra");
+      const off = data.people.filter((person) => person.cemetery === "chevra" && !person.onMap);
+      const extra = document.createElement("div");
+      extra.className = "other-list";
+      extra.appendChild(paragraph(`${drawn} people are drawn on the grid. ${off.length} Chevra records are not on a square. ${others.length} records are Rosedale or another cemetery.`));
+      mainEl.appendChild(extra);
+    }
+
+    function fieldButton(field) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = `field-btn ${field.band}${field.assumed ? " assumed" : ""}`;
+      button.textContent = field.code;
+      button.setAttribute("aria-pressed", "false");
+      button.addEventListener("click", () => renderField(field.code));
+      return button;
+    }
+
+    function renderNav(active) {
+      navEl.replaceChildren();
+      ["single-early", "single-late", "double", "triple"].forEach((band) => {
+        const heading = document.createElement("h2");
+        heading.textContent = bandTitle(band)[0];
+        navEl.appendChild(heading);
+        data.fields.filter((field) => field.band === band).forEach((field) => {
+          const button = fieldButton(field);
+          if (field.code === active) button.setAttribute("aria-pressed", "true");
+          navEl.appendChild(button);
+        });
+      });
+      const back = document.createElement("button");
+      back.type = "button";
+      back.className = "text-btn";
+      back.textContent = "All fields";
+      back.addEventListener("click", renderOverview);
+      navEl.appendChild(back);
+    }
+
+    function renderField(code) {
+      const field = data.fields.find((item) => item.code === code);
+      renderNav(code);
+      mainEl.replaceChildren();
+      const head = document.createElement("div");
+      head.className = "grid-head";
+      const title = document.createElement("h2");
+      title.textContent = `Field ${code}`;
+      head.appendChild(title);
+      mainEl.appendChild(head);
+      const numbering = field.numbering === "continuous"
+        ? `Lot numbers continue across the three rows, ${field.width} to a row.`
+        : `Each row restarts at 1 and has ${field.width} lots.`;
+      mainEl.appendChild(paragraph(`${numbering} Row 1 is the entrance side. Lot 1 is on the left.`, "hint"));
+      if (field.assumed) {
+        mainEl.appendChild(paragraph("This field's place in the cemetery is an assumption. The source photo does not label it.", "hint"));
+      }
+      const legend = document.createElement("div");
+      legend.className = "legend";
+      legend.innerHTML = '<span><i class="swatch filled"></i>Burial in the lists</span><span><i class="swatch"></i>No name in the lists</span>';
+      mainEl.appendChild(legend);
+
+      const rows = document.createElement("div");
+      rows.className = "rows";
+      for (let row = 1; row <= 3; row += 1) {
+        const line = document.createElement("div");
+        line.className = "row";
+        const label = document.createElement("div");
+        label.className = "row-label";
+        label.textContent = row === 1 ? "Row 1 entrance" : `Row ${row}`;
+        line.appendChild(label);
+        const lots = data.plots
+          .filter((plot) => plot.field === code && plot.row === row && !plot.suffix)
+          .sort((a, b) => a.lot - b.lot);
+        lots.forEach((plot) => {
+          const extras = data.plots.filter((item) => item.field === code && item.row === row && item.lot === plot.lot && item.suffix);
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = `cell${plot.status === "occupied" || extras.some((item) => item.ids.length) ? " occupied" : ""}`;
+          const number = document.createElement("span");
+          number.className = "lot-no";
+          number.textContent = String(plot.lot);
+          button.appendChild(number);
+          peopleIn(plot.ids).forEach((person) => {
+            const who = document.createElement("span");
+            who.className = "who";
+            who.textContent = person.last || person.name;
+            button.appendChild(who);
+            if (person.id === selectedId) button.classList.add("selected");
+          });
+          extras.forEach((extra) => {
+            peopleIn(extra.ids).forEach((person) => {
+              const who = document.createElement("span");
+              who.className = "suffix-line";
+              who.textContent = `${plot.lot}${extra.suffix} ${person.last || person.name}`;
+              button.appendChild(who);
+              if (person.id === selectedId) button.classList.add("selected");
+            });
+          });
+          button.addEventListener("click", () => {
+            selectedId = "";
+            document.querySelectorAll(".cell.selected").forEach((cell) => cell.classList.remove("selected"));
+            button.classList.add("selected");
+            const names = peopleIn(plot.ids);
+            extras.forEach((extra) => names.push(...peopleIn(extra.ids)));
+            const existing = document.querySelector("#detail");
+            if (existing) existing.remove();
+            if (!names.length) {
+              mainEl.appendChild(showDetail(
+                `Field ${code}, row ${row}, lot ${plot.lot}`,
+                [paragraph("No burial in the lists. An empty square is not marked as reserved.")]
+              ));
+              return;
+            }
+            if (names.length === 1) {
+              mainEl.appendChild(personDetail(names[0]));
+              return;
+            }
+            const nodes = names.flatMap((person) => [
+              paragraph(`${person.name} — ${dateLine(person)}`),
+              person.notes ? paragraph(person.notes, "source") : paragraph(""),
+            ]);
+            mainEl.appendChild(showDetail(`Field ${code}, row ${row}, lot ${plot.lot}`, nodes));
+          });
+          line.appendChild(button);
+        });
+        rows.appendChild(line);
+      }
+      mainEl.appendChild(rows);
+
+      const missed = data.people.filter((person) => person.cemetery === "chevra" && !person.onMap && person.field === code);
+      if (missed.length) {
+        const box = document.createElement("section");
+        box.className = "unplaced";
+        const heading = document.createElement("h3");
+        heading.textContent = "Not drawn on this grid";
+        box.appendChild(heading);
+        missed.forEach((person) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "text-btn";
+          button.textContent = `${person.name} — ${placeLine(person)}`;
+          button.addEventListener("click", () => {
+            const existing = document.querySelector("#detail");
+            if (existing) existing.remove();
+            mainEl.appendChild(personDetail(person));
+          });
+          box.appendChild(button);
+        });
+        mainEl.appendChild(box);
+      }
+      if (selectedId && byId[selectedId] && byId[selectedId].field === code) {
+        mainEl.appendChild(personDetail(byId[selectedId]));
+        const selected = document.querySelector(".cell.selected");
+        if (selected) selected.scrollIntoView({ block: "nearest", inline: "nearest" });
+      }
+    }
+
+    function renderResults() {
+      const query = searchEl.value.trim().toLowerCase();
+      resultsEl.replaceChildren();
+      if (query.length < 2) return;
+      const parts = query.split(/\s+/);
+      const found = data.people.filter((person) => {
+        const hay = [person.name, person.last, person.first, person.other, person.hebrew, person.master, person.recent].join(" ").toLowerCase();
+        return parts.every((part) => hay.includes(part));
+      }).slice(0, 16);
+      if (!found.length) {
+        resultsEl.appendChild(paragraph("No matching name."));
+        return;
+      }
+      found.forEach((person) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = `${person.name} — ${placeLine(person)}`;
+        button.addEventListener("click", () => {
+          selectedId = person.id;
+          if (person.onMap) renderField(person.field);
+          else {
+            renderNav("");
+            mainEl.replaceChildren(personDetail(person));
+          }
+        });
+        resultsEl.appendChild(button);
+      });
+    }
+
+    fetch("cemetery.json")
+      .then((response) => {
+        if (!response.ok) throw new Error(String(response.status));
+        return response.json();
+      })
+      .then((payload) => {
+        data = payload;
+        byId = Object.fromEntries(data.people.map((person) => [person.id, person]));
+        renderNav("");
+        renderOverview();
+        searchEl.addEventListener("input", renderResults);
+      })
+      .catch(() => {
+        mainEl.textContent = "The map data did not load. From the project folder, run python -m http.server and open web/index.html.";
+      });
+  </script>
+</body>
+</html>

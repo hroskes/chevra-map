@@ -12,6 +12,7 @@ assumptions at the top of open-questions.md.
 from __future__ import annotations
 
 import csv
+import json
 import re
 from collections import defaultdict
 from pathlib import Path
@@ -800,6 +801,81 @@ def write_csv(path: Path, fields: list[str], rows: list[dict]) -> None:
         writer.writerows(rows)
 
 
+def person_name(burial: dict) -> str:
+    if burial["name_last"] and burial["name_first"]:
+        return f"{burial['name_last']}, {burial['name_first']}"
+    return burial["name_raw"]
+
+
+def band_for(field: str) -> str:
+    if len(field) == 1 and field <= "J":
+        return "single-early"
+    if len(field) == 1:
+        return "single-late"
+    if len(field) == 2:
+        return "double"
+    return "triple"
+
+
+def write_web(burials: list[dict], plots: list[dict]) -> None:
+    people = []
+    for burial in burials:
+        people.append(
+            {
+                "id": burial["burial_id"],
+                "name": person_name(burial),
+                "last": burial["name_last"],
+                "first": burial["name_first"],
+                "other": burial["name_other"],
+                "date": burial["date_iso"] or burial["date_raw"],
+                "rawDate": burial["date_raw"],
+                "certainty": burial["date_certainty"],
+                "field": burial["field"],
+                "row": burial["row"],
+                "lot": burial["lot_raw"] or burial["lot_number"],
+                "suffix": burial["lot_suffix"],
+                "onMap": burial["on_map"] == "yes",
+                "cemetery": burial["cemetery"],
+                "notes": burial["notes"],
+                "hebrew": burial["hebrew_name"],
+                "where": burial["location_raw"],
+                "master": burial["master_line"],
+                "recent": burial["since_2020_line"],
+            }
+        )
+    web_plots = []
+    for plot in plots:
+        web_plots.append(
+            {
+                "field": plot["field"],
+                "row": int(plot["row"]),
+                "lot": int(plot["lot_number"]),
+                "suffix": plot["lot_suffix"],
+                "status": plot["status"],
+                "ids": [item for item in plot["burial_id"].split(";") if item],
+            }
+        )
+    fields = []
+    for code in field_order():
+        spec = width_and_kind(code)
+        if spec is None:
+            continue
+        width, kind = spec
+        fields.append(
+            {
+                "code": code,
+                "width": width,
+                "numbering": kind,
+                "band": band_for(code),
+                "assumed": code in {"KK", "LLL"},
+            }
+        )
+    payload = {"people": people, "plots": web_plots, "fields": fields}
+    destination = ROOT / "web" / "cemetery.json"
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+
+
 def numbering_issues(issues: list[dict]) -> None:
     for index, issue in enumerate(issues, start=1):
         issue["issue_id"] = f"q{index:04d}"
@@ -869,6 +945,7 @@ def main() -> None:
     write_csv(DATA / "burials.csv", BURIAL_FIELDS, burials)
     write_csv(DATA / "plots.csv", PLOT_FIELDS, plots)
     write_csv(DATA / "qa-issues.csv", QA_FIELDS, issues)
+    write_web(burials, plots)
     print(summary)
     print(f"QA issues: {len(issues)}")
     for kind in ("unparsed", "location_conflict", "ambiguous_match", "off_grid", "shared_lot"):

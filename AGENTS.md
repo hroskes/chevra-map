@@ -132,7 +132,8 @@ scripts/build_dataset.py  # rebuilds the CSVs from the two PDFs
 data/burials.csv          # one row per person
 data/plots.csv            # one row per lot on the working grid
 data/qa-issues.csv        # parse failures, conflicts, numbering flags
-web/                      # static interactive map
+web/index.html            # interactive map; open it from a local web server
+web/cemetery.json         # map data, rewritten by scripts/build_dataset.py
 print/                    # PDF map generator and its output
 ```
 
