@@ -128,8 +128,9 @@ AGENTS.md
 cemetery map.png
 list of departed since 2020 (11-10-26).pdf
 master list of departed poorly formatted.pdf
+scripts/build_dataset.py  # rebuilds the CSVs from the two PDFs
 data/burials.csv          # one row per person
-data/plots.csv            # one row per lot in the confirmed grid
+data/plots.csv            # one row per lot on the working grid
 data/qa-issues.csv        # parse failures, conflicts, numbering flags
 web/                      # static interactive map
 print/                    # PDF map generator and its output
@@ -147,7 +148,9 @@ Create `data/`, `web/`, and `print/` when that phase starts. Generated files sho
 - `name_order` — `last_first` (master list) or `first_last` (recent list)
 - `date_raw`
 - `date_iso` — `YYYY-MM-DD` when the day is known, otherwise blank
-- `date_certainty` — `exact`, `year`, `partial`, `ambiguous_century`, or `unknown`
+- `date_certainty` — `exact`, `assumed_century`, `year`, `partial`, or `unknown`
+- `date_year` — expanded year when one can be read, otherwise blank
+- `on_map` — `yes` when the canonical field, row, and lot fall on the working grid
 - `cemetery` — `chevra`, `rosedale`, `elsewhere`, or `unknown`
 - `field` — uppercase letters, blank when the person is not in a Chevra field
 - `row` — integer text, or blank
@@ -164,19 +167,23 @@ Create `data/`, `web/`, and `print/` when that phase starts. Generated files sho
 Date rules:
 
 - Always keep `date_raw`.
-- In the recent list, two-digit years 20–26 are 2020–2026.
-- In the master list, two-digit years 50–99 are 1950–1999.
-- In the master list, two-digit years 00–49 stay `ambiguous_century` unless the same person is dated in the recent list.
-- Partial dates stay out of `date_iso`.
+- In the recent list, two-digit years 20–26 are 2020–2026 and `date_certainty` is `exact`.
+- In the master list, two-digit years are expanded and `date_certainty` is `assumed_century` when the day is complete: 50–99 are 1950–1999, 27–49 are 1927–1949, and 00–26 are 2000–2026.
+- A four-digit year is `exact`.
+- Partial dates and year-only dates stay out of `date_iso`.
+- `date_year` holds the expanded year when one can be read, including year-only dates.
 
-Matching rule for `source=both`: same field, row, and lot, a compatible date, and names that match after swapping order. A nickname in parentheses (`Eddie`) does not block a match. When two rows disagree, keep both source lines and add a QA issue. When both dates are the same day, store the recent list's fuller spelling in `date_iso`.
+Matching rule for `source=both`: same first and last name after swapping order. If several master rows share that name, the field, row, lot, or date decides which one. A nickname in parentheses (`Eddie`) does not block a match. The same field, row, lot, and date are one person even when the spelling differs by a letter (`Kaufman` / `Kaufmann`, `Guttman` / `Guttmann`). When the later list gives the field and row and no lot, and the first names are close, the master-list lot is kept (`Harry` / `Harvey Honick`). Other names that differ by a letter stay as two rows. When the lines disagree, the 2020–2026 list supplies the map location, both original lines are kept, and a QA issue is written. When both dates are a full day, `date_iso` uses the recent list's date.
 
-`data/plots.csv` columns, written after the J–O numbering question is settled:
+`data/plots.csv` columns:
 
 - `field`, `row`, `lot_number`, `lot_suffix`
-- `lots_per_row` — 18 or 14
-- `status` — `occupied`, `empty`, or `reserved`
-- `burial_id` — blank when empty or reserved
+- `lots_per_row` — the working width for that field
+- `numbering` — `restart` or `continuous`
+- `status` — `occupied` or `empty` in the first version (`reserved` waits for a named list)
+- `burial_id` — blank when empty; more than one id, separated by semicolons, when several people share the lot
+
+Letter-suffix plots are extra rows, created only when a burial uses that suffix. The base lot is still in the grid.
 
 `data/qa-issues.csv` columns:
 

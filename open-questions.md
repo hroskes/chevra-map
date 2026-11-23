@@ -48,7 +48,9 @@ These are in force for `data/`, `web/`, and `print/`. None of them is confirmed 
 
 11. **Rosedale, King David, "buried elsewhere," and rows with no field are in the CSV and off the grave map.**
 
-12. **Master-list years 50–99 are 1950–1999. Years 00–49 stay undated** in `date_iso` unless the later list dates that person. Partial dates stay out of `date_iso`.
+12. **Two-digit death years are expanded, and marked `assumed_century` when the day is otherwise complete.** Master list: 50–99 are 1950–1999, 27–49 are 1927–1949, and 00–26 are 2000–2026. The 2020–2026 list's own two-digit years 20–26 are 2020–2026 and are marked `exact`, because that file is the 2020s. A four-digit year in either file is `exact`. Partial dates and year-only dates stay out of `date_iso`. A visit or a stone is still the check on any single year.
+
+13. **The same grave and the same date are one person, even when the spelling differs.** Susan Kaufman and Kaufmann Susan are one row. Egon Guttman and Guttmann are one row. Dora Weiss (Blum) is one row. When the later list gives the field and row and no lot, and the first names are close, the master-list lot is used. That is how Harry Honick is drawn at III row 2 lot 14, the Harvey Honick grave. Question 12.
 
 ## 1. Natalie Greenfield and Susan Roedel in field J
 
@@ -171,3 +173,17 @@ Double-letter fields otherwise stop at 14. The master list has `Bodenheimer Max 
 - How to answer: visit, with the source photo in hand.
 
 The photo labels A at the Liberty Road entrance and S, JJ, and KKK at the far end. The color bands group A–J, then the later single letters, then the double letters, then the triple letters. The lists use A–S, AA–JJ, and AAA–KKK only. Walk the bands and confirm the order of the unlabeled fields, and where one field stops and the next starts.
+
+## 12. Places where the two lists disagree, other than Greenfield and Roedel
+
+- Status: open
+- How to answer: visit, or the plot book.
+
+The first map uses the 2020–2026 list when both lines name a grave. These four are the other disagreements. Michael Eisenberg's later lot is 18, and the working grid for JJ only runs to 14, so he is left off the drawing.
+
+- Joseph Cotton: master list JJ row 1 lot 8, later list JJ row 1 lot 7
+- Michael Eisenberg: master list JJ row 1 lot 14, later list JJ row 1 lot 18
+- Doris Fox: master list P row 3 lot 8, later list P row 3 lot 6. Lot 6 already has David Berzon in the master list.
+- Sara Kovacs: master list JJ row 3 lot 3, later list JJ row 3 lot 4
+
+Same grave and same date are drawn once when the spelling differs: Susie Schwarz / Schwartz at R row 3 lot 15, Susan and Naomi Propper / Proper, Susan Kaufman / Kaufmann at CCC row 2 lot 6, Egon Guttman / Guttmann at GG row 3 lot 7, and Dora Weiss (Blum) at BB row 1 lot 4. Harry Honick in the later list has no lot number; the master list's Harvey Honick, III row 2 lot 14, same date, is used for the square. Question the stone if Harry and Harvey might be different people.
