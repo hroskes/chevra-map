@@ -1,0 +1,222 @@
+# Chevra Ahavas Chesed Cemetery
+
+Agent guide for this repository. Read this before changing data, the map, or the printable index.
+
+## Goal
+
+Build three deliverables from the committed source files:
+
+1. A well-formatted CSV of burials, including empty lots once the grid is confirmed.
+2. An interactive map web app for finding a grave.
+3. A readable PDF map with symbols, numbers, and an alphabetical index, in the spirit of an amusement-park map.
+
+Do the CSV first. The map and the PDF both depend on it. Pause before drawing any field whose lot numbering disagrees with Stanley's counts.
+
+## Source files
+
+These three files are the original sources. Leave their bytes unchanged. A later commit may move them with `git mv` only.
+
+| File | Role |
+| --- | --- |
+| `cemetery map.png` | Satellite photo of Chevra Ahavas Chesed Cemetery on Liberty Road, with colored field bands. |
+| `master list of departed poorly formatted.pdf` | Alphabetical burials, about the 1950s through 2022. Printed total: "1,545 as of 12/22/2022". |
+| `list of departed since 2020 (11-10-26).pdf` | Chronological burials from Paula Junker on 3/26/20 through Morris Lasson on 7/17/2026. |
+
+### How the lists are written
+
+Master list, one person per line, last name first:
+
+`Abosch Joseph AA 2 6 10/21/76`
+
+Meaning: name, field, row, lot, date of death. The date is often missing or partial (`3/??/94`, `60`, `8/8/`). Lot values sometimes have a letter suffix (`11A`, `1A`, `15A`).
+
+The same file ends with a separate Rosedale block. Those lines use a different plot style (`Rosedale B3`) and sometimes a Hebrew name. One line spells it `Rosdale`. Keep Rosedale rows in the CSV and keep them off the Chevra map.
+
+Recent list, first name first, with a header `NAME Date of Death Location of Grave`:
+
+`Paula Junker 3/26/20 Field R, Row 3, Lot 10`
+
+The same person can appear in both files under opposite name order, sometimes with a nickname:
+
+- Master: `Baer Adolph R 3 17 9/6/20`
+- Recent: `Adolph (Eddie) Baer 9/6/20 Field R, Row 3, Lot 17`
+
+Location text in the recent list is inconsistent: `Field JJJ-Row 3-#6`, `Number 6`, `Grave 11`, `Field AAA* Row1 lot 14`, `Field KK, Row 2. Lot 6`, `JJ,,`, and the typo `Fiels`. Some people have no location. Some say `Buried Elsewhere`, `Buried in Denver, CO`, or `King David Cemetery`.
+
+Infant and fetus lines exist (`Levi Baby D`, `Weis Foetus C`, `Stein Fetus E`, `Zippert Foetus 1 C`). Keep them.
+
+## Cemetery layout
+
+Chevra Ahavas Chesed sits on Liberty Road, between Beth El Cemetery and Shaari Zion Cemetery. The entrance and field A are at the Liberty Road end. The plot-listing display board is toward the far end.
+
+Fields used in the master list:
+
+- Single letters A through S
+- Double letters AA through JJ
+- Triple letters AAA through KKK
+
+The map legend draws wider ranges (K through Z, AA through ZZ, AAA through ZZZ). Those extra letters do not appear in the burial lists. Draw the letters that exist.
+
+Color bands on the source image:
+
+- Blue: single letters A through J
+- Green: single letters continuing through S (the legend text says K through Z)
+- Orange: double letters (the legend text says AA through ZZ; the lists use AA through JJ)
+- Pink: triple letters (the legend text says AAA through ZZZ; the lists use AAA through KKK)
+- Red: outline of the whole cemetery
+
+LLL was added after this image was made. The recent list also contains field KK (2025–2026), which is absent from the master list and is not labeled on the image. Ask before drawing KK or LLL.
+
+### Lots per row (Stanley)
+
+- Single-letter fields: 18 lots per row
+- Double-letter and triple-letter fields: 14 lots per row
+
+The lists show three rows (1, 2, and 3) in every field that has enough burials to tell. Stanley did not state the row count. Use three rows as the working grid, and ask before adding a fourth.
+
+Stanley's cap fits the double-letter fields, the triple-letter fields, and single-letter fields P, Q, R, and S (max lot 18, numbering restarts each row). One recorded exception: HH row 2 lot 19.
+
+Fields A through I mostly restart each row and stay at or under 18. Fields J through O do not. In L, M, and N the maxima are about 16, 32, and 48 for rows 1, 2, and 3, which looks like one numbering sequence running through the field (about 16 lots per row) rather than a restart at 1. J, K, and O are similar and less tidy. Keep the printed lot and flag it in the QA file. Do not renumber those lots to 1–18.
+
+### Empty and reserved lots
+
+Many lots have no burial. Some empty lots are reserved for a surviving spouse. The source files do not say which empties are reserved.
+
+Represent every lot in the confirmed grid:
+
+- `occupied` when a burial is recorded
+- `empty` when no burial is recorded
+- `reserved` only when Stanley or the cemetery has identified that lot as held
+
+Adjacent same-surname burials are common. That pattern can suggest a reserved neighbor. Record the suggestion as a QA note. Mark a lot `reserved` only from a named source, not from the name pattern alone.
+
+## Find a Grave
+
+Skip a Find a Grave reconciliation.
+
+Find a Grave does not publish a public read API. The site has an internal GraphQL endpoint, and third-party tools call it, but that is not a documented API. Ancestry's terms (Find a Grave is an Ancestry service) prohibit automated or programmatic access beyond ordinary human use. FamilySearch offers a limited "Find a Grave Index" through its developer platform (collection 2221801). That index is thinner than the memorial pages, requires FamilySearch credentials, and is a poor fit for plot-by-plot checking.
+
+Do not scrape Find a Grave, and do not call its undocumented endpoint. A person may later look up individual public memorials by hand and add discrepancies to `data/qa-issues.csv`. That step waits until the CSV exists.
+
+## Target layout
+
+```
+AGENTS.md
+.cursor/rules/chevra-cemetery.mdc
+cemetery map.png
+list of departed since 2020 (11-10-26).pdf
+master list of departed poorly formatted.pdf
+data/burials.csv          # one row per person
+data/plots.csv            # one row per lot in the confirmed grid
+data/qa-issues.csv        # parse failures, conflicts, numbering flags
+web/                      # static interactive map
+print/                    # PDF map generator and its output
+```
+
+Create `data/`, `web/`, and `print/` when that phase starts. Generated files should be reproducible from the CSV and the source image.
+
+## Canonical CSV
+
+`data/burials.csv` columns:
+
+- `burial_id` — stable id assigned by the parser
+- `name_raw` — the name text as printed
+- `name_last`, `name_first`, `name_other` — split when the split is clear; leave blank when it is not
+- `name_order` — `last_first` (master list) or `first_last` (recent list)
+- `date_raw`
+- `date_iso` — `YYYY-MM-DD` when the day is known, otherwise blank
+- `date_certainty` — `exact`, `year`, `partial`, `ambiguous_century`, or `unknown`
+- `cemetery` — `chevra`, `rosedale`, `elsewhere`, or `unknown`
+- `field` — uppercase letters, blank when the person is not in a Chevra field
+- `row` — integer text, or blank
+- `lot_raw` — printed lot, including a suffix
+- `lot_number` — integer part, or blank
+- `lot_suffix` — blank, or the trailing letters (`A`)
+- `location_raw` — the recent-list location phrase, or the Rosedale plot phrase
+- `hebrew_name` — Rosedale lines that include one
+- `source` — `master`, `since_2020`, or `both`
+- `master_line` — original master line when present
+- `since_2020_line` — original recent line when present
+- `notes`
+
+Date rules:
+
+- Always keep `date_raw`.
+- In the recent list, two-digit years 20–26 are 2020–2026.
+- In the master list, two-digit years 50–99 are 1950–1999.
+- In the master list, two-digit years 00–49 stay `ambiguous_century` unless the same person is dated in the recent list.
+- Partial dates stay out of `date_iso`.
+
+Matching rule for `source=both`: same field, row, and lot, a compatible date, and names that match after swapping order. A nickname in parentheses (`Eddie`) does not block a match. When two rows disagree, keep both source lines and add a QA issue. When both dates are the same day, store the recent list's fuller spelling in `date_iso`.
+
+`data/plots.csv` columns, written after the J–O numbering question is settled:
+
+- `field`, `row`, `lot_number`, `lot_suffix`
+- `lots_per_row` — 18 or 14
+- `status` — `occupied`, `empty`, or `reserved`
+- `burial_id` — blank when empty or reserved
+
+`data/qa-issues.csv` columns:
+
+- `issue_id`, `severity` (`block` or `review`), `kind`, `source_line`, `detail`
+
+Treat these as blocks: location text that does not parse, two different people on one lot, a lot above the Stanley cap outside fields J–O, and any drawing of KK or LLL before those fields are placed. Treat these as reviews: J–O high lot numbers, missing dates, ambiguous centuries, possible reserved neighbors, and people buried elsewhere.
+
+The master list's printed total is 1,545 Chevra names as of 12/22/2022. The QA report should show the parsed Chevra count, the Rosedale count, and the elsewhere count beside that figure.
+
+## Plan
+
+### Phase 1 — CSV
+
+1. Parse the master PDF line by line. Separate the Rosedale block from the Chevra block.
+2. Parse the recent PDF. Normalize the location phrases above. Keep elsewhere and missing-location rows.
+3. Match overlapping people from 2020 onward.
+4. Write `data/burials.csv` and `data/qa-issues.csv`.
+5. Stop and review the QA file before building `plots.csv` or any map. List every lot in fields J–O that is greater than 18, and every KK or LLL burial.
+
+### Phase 2 — Plot grid
+
+1. Confirm with Stanley: row count, the J–O numbering, where lot 1 sits in a row, which side row 1 is on, where KK and LLL are, and which empty lots are reserved.
+2. Write `data/plots.csv` for A–S, AA–JJ, and AAA–KKK using 18 or 14 lots and three rows.
+3. Add KK and LLL only after their positions and sizes are confirmed.
+4. Join burials onto plots. One burial per lot. Conflicts go to QA and stay visible in the app.
+
+### Phase 3 — Interactive map
+
+A static site in `web/` that loads the CSVs in the browser. No account and no server.
+
+- Schematic grid, field by field, using the source image's colors for single, double, and triple bands.
+- Search by name. Filter by field.
+- Click a lot for the name, date, and field/row/lot.
+- Occupied, empty, and reserved lots look different.
+- Usable on a phone at the cemetery.
+- The satellite photo can sit beside the schematic as a field-level overview. The photo does not show individual graves, so the grave map is the schematic.
+
+### Phase 4 — PDF map
+
+A multi-page PDF in `print/`:
+
+- An overview page of the field bands, in the same spatial order as `cemetery map.png`, with KK and LLL omitted until placed.
+- One page per field, or per small group of fields, with a symbol and a number on each lot.
+- An alphabetical index: name, field, row, lot, and the map key.
+- Empty lots stay on the map and stay visually quiet. Reserved lots use their own symbol.
+- The index includes Chevra burials. Elsewhere and Rosedale names can have a short separate list so they are omitted from the grave drawing.
+
+## Open questions
+
+These block Phase 2 and anything that draws a grave:
+
+1. For fields J through O, do lot numbers continue across rows, or were restarted row numbers copied down in a continuous sequence?
+2. Does every field have exactly three rows of 18 or 14 lots?
+3. Which end of a row is lot 1, and which side of a field is row 1?
+4. Where are KK and LLL, and do they follow the 14-lot rule?
+5. Which currently empty lots are reserved, and for whom?
+
+## Working rules
+
+- Preserve every source string in a `*_raw` column.
+- Keep a person when the date or the location is incomplete.
+- Do not scrape Find a Grave.
+- Do not edit the three source files.
+- Mark a lot reserved only from a named source.
+- Use the satellite photo for field bands. It does not locate a grave inside a field.

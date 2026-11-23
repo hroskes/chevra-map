@@ -1,0 +1,42 @@
+---
+description: Constraints for the Chevra Ahavas Chesed cemetery dataset and maps
+alwaysApply: true
+---
+
+# Chevra Ahavas Chesed
+
+Read `AGENTS.md` before editing data, the web map, or the PDF.
+
+## Sources
+
+Leave these bytes unchanged: `cemetery map.png`, `master list of departed poorly formatted.pdf`, `list of departed since 2020 (11-10-26).pdf`.
+
+## Order of work
+
+1. `data/burials.csv` and `data/qa-issues.csv`
+2. Confirm the open questions in `AGENTS.md`, then `data/plots.csv`
+3. Static map in `web/`
+4. Indexed PDF in `print/`
+
+## Grid
+
+- Single-letter fields: 18 lots per row. Double- and triple-letter fields: 14.
+- Working row count is 3. Ask before adding a row.
+- Fields in the master list: A–S, AA–JJ, AAA–KKK.
+- Fields J–O use lot numbers above 18. Keep the printed lot and record a QA issue. Leave those lots unrenumbered.
+- KK and LLL appear only in later records. Ask before drawing them.
+- Lot status is `occupied`, `empty`, or `reserved`. Use `reserved` only when Stanley or the cemetery named that lot.
+
+## Records
+
+Keep the printed name, date, and location in raw columns. Master names are last-then-first. Recent names are first-then-last. Rosedale and buried-elsewhere rows stay in the CSV and stay off the Chevra grave map.
+
+## Find a Grave
+
+There is no public read API suitable for this project. Do not scrape the site and do not call its undocumented endpoint.
+
+## Example
+
+Master: `Baer Adolph R 3 17 9/6/20`
+Recent: `Adolph (Eddie) Baer 9/6/20 Field R, Row 3, Lot 17`
+Those are one person. Store both source lines on one CSV row when field, row, lot, and date agree.
