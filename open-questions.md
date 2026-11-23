@@ -12,11 +12,11 @@ These are in force for `data/`, `web/`, and `print/`. None of them is confirmed 
 
 1. **Row 1 faces the entrance.** "Each block" is read as each field. Row 1 is the row closest to the Liberty Road entrance. Row 2 is the next row away from the entrance, then row 3. Every field, including KK and LLL, is drawn with three rows. On the maps, row 1 is the top of the field and the top of the page is the entrance side.
 
-2. **Lot 1 is on the left.** Lots increase left to right when row 1 is at the top. Walking in from Liberty Road, the Shaari Zion side is on the left and Beth El is on the right, so this puts lot 1 toward Shaari Zion. The lists do not say which end is lot 1. Question 5.
+2. **Lot 1 is on the left.** Lots increase left to right when row 1 is at the top. On the overview, that left is the A–J and K–S side, with Shaari Zion to the right of A–J. Left and right on the page are the reverse of left and right as you walk in from Liberty Road, so the left end of a row is on your right as you enter. The lists do not say which end is lot 1. Question 5.
 
-3. **Single letters run from A at the entrance to S at the far end,** on the Shaari Zion side, in alphabetical order. That part matches the labels on `cemetery map.png`. The photo's blue band is A–J and the green band continues with K–S. Fields T–Z are not drawn.
+3. **The printable overview follows the source photo, with the entrance at the top.** In the upper part, blue A–J is on the left and Shaari Zion Cemetery parallels it on the right. Green K–S continues straight down from J. Orange AA–JJ and pink AAA–KKK are to the right of K–S, starting where Shaari Zion ends. Each field is drawn the same height, so K lines up with AA and AAA. The plot listing board is one field tall between HH and II, which puts it beside S, and II, JJ, JJJ, and KKK continue past S. The photo itself shows the bands ending together; this equal-height reading is unconfirmed. Fields T–Z are not drawn. The source legend extends those bands through Z, ZZ, and ZZZ; the burial lists stop at S, JJ, and KKK.
 
-4. **KK is drawn just after JJ, and LLL just after KKK.** You asked for KK between JJ and AAA, and LLL after KKK. The photo shows three bands beside each other in the far half of the cemetery: singles K–S, doubles AA–JJ, triples AAA–KKK, with AA beside AAA and JJ beside KKK. The first map keeps those bands. KK is added at the far end of the double-letter band, after JJ. LLL is added at the far end of the triple-letter band, after KKK. AAA stays where the photo labels it, beside AA, so KK is not drawn as AAA's neighbor. If KK should instead sit on a path that has JJ on one side and AAA on the other, the overview is wrong. Question 6.
+4. **KK and LLL are not on the printable overview.** They were added after the photo, so page 2 leaves them off and each has its own field page. You asked for KK between JJ and AAA, and LLL after KKK. That is still unconfirmed. The interactive map still lists KK after JJ and LLL after KKK. Question 6.
 
 5. **Row lengths, used as the grid even where a visit may find more empty lots.** Numbering restarts at 1 each row, except J–O.
 
@@ -42,15 +42,17 @@ These are in force for `data/`, `web/`, and `print/`. None of them is confirmed 
 
 8. **When the two lists name one person and disagree, the 2020–2026 list supplies the map location.** Both original lines stay on the CSV row. A match requires the same first and last name. A parenthetical nickname does not block it. Names that differ by a letter are left as two rows.
 
-9. **A letter suffix is a second burial drawn on that same lot,** marked with the letter. It does not add a new column. Empty "A" lots are not invented. Two unsuffixed names on one lot share the cell. Question 8 and question 9.
+9. **A letter suffix is not drawn on the numbered square.** The lot stays as printed (`15A`), and that person is listed under “Not on a square” on the field page. Empty "A" lots are not invented. Two unsuffixed names on one lot share the cell. What the letter means on the ground is still open. Question 8 and question 9.
 
-10. **An empty square means the lists have no burial there.** Nothing is marked reserved. Question 7.
+10. **An empty square means the lists have no burial there.** Some of those lots may be reserved. The map does not mark a lot reserved until Stanley or the cemetery names it. Question 7.
 
 11. **Rosedale, King David, "buried elsewhere," and rows with no field are in the CSV and off the grave map.**
 
 12. **Two-digit death years are expanded, and marked `assumed_century` when the day is otherwise complete.** Master list: 50–99 are 1950–1999, 27–49 are 1927–1949, and 00–26 are 2000–2026. The 2020–2026 list's own two-digit years 20–26 are 2020–2026 and are marked `exact`, because that file is the 2020s. A four-digit year in either file is `exact`. Partial dates and year-only dates stay out of `date_iso`. A visit or a stone is still the check on any single year.
 
 13. **The same grave and the same date are one person, even when the spelling differs.** Susan Kaufman and Kaufmann Susan are one row. Egon Guttman and Guttmann are one row. Dora Weiss (Blum) is one row. When the later list gives the field and row and no lot, and the first names are close, the master-list lot is used. That is how Harry Honick is drawn at III row 2 lot 14, the Harvey Honick grave. Question 12.
+
+14. **The plot listing board is one field tall, between HH and II, beside S.** You first placed it between HH and II. Giving every field the same height then puts that one-field board directly to the right of S. The words are written in the board, not beside the figure. The source photo only says the board is toward the far end. Question 11.
 
 ## 1. Natalie Greenfield and Susan Roedel in field J
 
@@ -125,7 +127,7 @@ Stand in one field whose occupants we trust, such as field A or field L, and rec
 
 ## 6. Where are fields KK and LLL?
 
-- Status: open. The first map places KK after JJ and LLL after KKK, on the photo's parallel bands. See assumption 4.
+- Status: open. The printable overview leaves KK and LLL off, because they are not on the source photo. The interactive map still lists KK after JJ and LLL after KKK. See assumption 4.
 - How to answer: visit, or Stanley if he has a current field diagram.
 
 Neither field is labeled on `cemetery map.png`. LLL was added after that image. KK appears only in the 2025–2026 burials (the master list stops at JJ and KKK). The later list uses both, so the graves exist. We need the walk order: KK relative to JJ, LLL relative to KKK, and whether each row has 14 lots.
@@ -135,14 +137,14 @@ Neither field is labeled on `cemetery map.png`. LLL was added after that image. 
 - Status: open
 - How to answer: Stanley, or the cemetery's plot book. A visit can see an empty space. It cannot tell a reserved lot from an unused one unless the marker says so.
 
-Some empties are held for a surviving spouse. The burial lists never mark those. Until there is a named list, the map treats a lot with no burial as empty, not reserved.
+Some empties are held for a surviving spouse. The burial lists never mark those. Until there is a named list, an empty square only means no burial is recorded. It may still be reserved.
 
 ## 8. What is a letter-suffix lot on the ground?
 
 - Status: open
 - How to answer: visit. Look at one or two, then say whether the rest look the same.
 
-The master list has graves such as `Birnbaum Chaim J 1 14A` beside Frieda at 14, and several in field B (`Deutsch Elsa B 2 1A` beside Johanna Lieberman at lot 1). We need to know whether the "A" is a separate grave cut beside that number, a second burial in the same grave, or a list-keeping habit.
+The master list has graves such as `Birnbaum Chaim J 1 14A` beside Frieda at 14, and several in field B (`Deutsch Elsa B 2 1A` beside Johanna Lieberman at lot 1). We need to know whether the "A" is a separate grave cut beside that number, a second burial in the same grave, or a list-keeping habit. Until then the map does not put the suffix name inside the numbered square. It lists the person under “Not on a square” on that field’s page.
 
 Field B has seven of these. C, D, E, and F have a few. K has 14A, 15A, 28A, and 29A.
 
@@ -172,7 +174,7 @@ Double-letter fields otherwise stop at 14. The master list has `Bodenheimer Max 
 - Status: open
 - How to answer: visit, with the source photo in hand.
 
-The photo labels A at the Liberty Road entrance and S, JJ, and KKK at the far end. The color bands group A–J, then the later single letters, then the double letters, then the triple letters. The lists use A–S, AA–JJ, and AAA–KKK only. Walk the bands and confirm the order of the unlabeled fields, and where one field stops and the next starts.
+The photo labels A at the Liberty Road entrance and S, JJ, and KKK at the far end. The color bands group A–J, then the later single letters, then the double letters, then the triple letters. The lists use A–S, AA–JJ, and AAA–KKK only. Walk the bands and confirm the order of the unlabeled fields, and where one field stops and the next starts. The printable map gives every field the same height, so K lines up with AA and AAA. It draws the plot listing board as one field between HH and II, which puts the board beside S, and lets II, JJ, JJJ, and KKK continue past S. Confirm the equal heights and that spot.
 
 ## 12. Places where the two lists disagree, other than Greenfield and Roedel
 

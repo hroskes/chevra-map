@@ -191,7 +191,7 @@
   <header>
     <p class="eyebrow">Liberty Road</p>
     <h1>Chevra Ahavas Chesed</h1>
-    <p class="banner">First schematic, not a survey. Row 1 is drawn toward the entrance. Lot 1 is on the left. KK is drawn after JJ, and LLL after KKK. An empty square has no name in the lists. It is not marked reserved.</p>
+    <p class="banner">First schematic, not a survey. Row 1 is drawn toward the entrance. Lot 1 is on the left. KK is drawn after JJ, and LLL after KKK. An empty square has no name in the lists. It may still be reserved.</p>
     <label for="q">Find a person</label>
     <input id="q" type="search" placeholder="Last name or first name" autocomplete="off">
     <div id="results"></div>
@@ -210,8 +210,8 @@
     let selectedId = "";
 
     function bandTitle(band) {
-      if (band === "single-early") return ["A–J", "Single letters along Shaari Zion, from the entrance.", "single-early"];
-      if (band === "single-late") return ["K–S", "Single letters continuing toward the far end.", "single-late"];
+      if (band === "single-early") return ["A–J", "Single letters from the entrance. Shaari Zion is beside them.", "single-early"];
+      if (band === "single-late") return ["K–S", "Single letters continuing from J.", "single-late"];
       if (band === "double") return ["AA–KK", "Double letters. KK, after JJ, is assumed.", "double"];
       return ["AAA–LLL", "Triple letters. LLL, after KKK, is assumed.", "triple"];
     }
@@ -232,9 +232,9 @@
       if (person.cemetery === "rosedale") return person.where || "Rosedale";
       if (person.cemetery === "elsewhere") return person.notes || "Buried elsewhere";
       if (person.cemetery === "unknown") return "No Chevra grave in the lists";
-      if (!person.onMap) {
+      if (!person.onMap || person.suffix) {
         const bits = [person.field, person.row && `row ${person.row}`, person.lot && `lot ${person.lot}`].filter(Boolean);
-        return bits.length ? `${bits.join(", ")} — not on the working grid` : "Not on the working grid";
+        return bits.length ? `${bits.join(", ")} — not on a square` : "Not on a square";
       }
       return `Field ${person.field}, row ${person.row}, lot ${person.lot}`;
     }
@@ -289,9 +289,9 @@
         groups.appendChild(card);
       });
       mainEl.appendChild(groups);
-      const drawn = data.people.filter((person) => person.onMap).length;
+      const drawn = data.people.filter((person) => person.onMap && !person.suffix).length;
       const others = data.people.filter((person) => person.cemetery !== "chevra");
-      const off = data.people.filter((person) => person.cemetery === "chevra" && !person.onMap);
+      const off = data.people.filter((person) => person.cemetery === "chevra" && (!person.onMap || person.suffix));
       const extra = document.createElement("div");
       extra.className = "other-list";
       extra.appendChild(paragraph(`${drawn} people are drawn on the grid. ${off.length} Chevra records are not on a square. ${others.length} records are Rosedale or another cemetery.`));
@@ -363,10 +363,9 @@
           .filter((plot) => plot.field === code && plot.row === row && !plot.suffix)
           .sort((a, b) => a.lot - b.lot);
         lots.forEach((plot) => {
-          const extras = data.plots.filter((item) => item.field === code && item.row === row && item.lot === plot.lot && item.suffix);
           const button = document.createElement("button");
           button.type = "button";
-          button.className = `cell${plot.status === "occupied" || extras.some((item) => item.ids.length) ? " occupied" : ""}`;
+          button.className = `cell${plot.status === "occupied" ? " occupied" : ""}`;
           const number = document.createElement("span");
           number.className = "lot-no";
           number.textContent = String(plot.lot);
@@ -378,27 +377,17 @@
             button.appendChild(who);
             if (person.id === selectedId) button.classList.add("selected");
           });
-          extras.forEach((extra) => {
-            peopleIn(extra.ids).forEach((person) => {
-              const who = document.createElement("span");
-              who.className = "suffix-line";
-              who.textContent = `${plot.lot}${extra.suffix} ${person.last || person.name}`;
-              button.appendChild(who);
-              if (person.id === selectedId) button.classList.add("selected");
-            });
-          });
           button.addEventListener("click", () => {
             selectedId = "";
             document.querySelectorAll(".cell.selected").forEach((cell) => cell.classList.remove("selected"));
             button.classList.add("selected");
             const names = peopleIn(plot.ids);
-            extras.forEach((extra) => names.push(...peopleIn(extra.ids)));
             const existing = document.querySelector("#detail");
             if (existing) existing.remove();
             if (!names.length) {
               mainEl.appendChild(showDetail(
                 `Field ${code}, row ${row}, lot ${plot.lot}`,
-                [paragraph("No burial in the lists. An empty square is not marked as reserved.")]
+                [paragraph("No burial in the lists. We do not know if this lot is reserved.")]
               ));
               return;
             }
@@ -418,12 +407,12 @@
       }
       mainEl.appendChild(rows);
 
-      const missed = data.people.filter((person) => person.cemetery === "chevra" && !person.onMap && person.field === code);
+      const missed = data.people.filter((person) => person.cemetery === "chevra" && person.field === code && (!person.onMap || person.suffix));
       if (missed.length) {
         const box = document.createElement("section");
         box.className = "unplaced";
         const heading = document.createElement("h3");
-        heading.textContent = "Not drawn on this grid";
+        heading.textContent = "Not on a square";
         box.appendChild(heading);
         missed.forEach((person) => {
           const button = document.createElement("button");
@@ -465,7 +454,7 @@
         button.textContent = `${person.name} — ${placeLine(person)}`;
         button.addEventListener("click", () => {
           selectedId = person.id;
-          if (person.onMap) renderField(person.field);
+          if (person.field && person.cemetery === "chevra") renderField(person.field);
           else {
             renderNav("");
             mainEl.replaceChildren(personDetail(person));

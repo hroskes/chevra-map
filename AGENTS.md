@@ -90,7 +90,7 @@ Fields A through I restart each row at 1. The highest lot number is the row leng
 | H | 16 | 48 |
 | I | 15 | 45 |
 
-That is 378 numbered plots. A letter suffix (`10A`, `1A`) is an extra grave beside that number. Those extras are concentrated in B (7), with a few in C, D, E, and F. A handful of numbers also carry two unsuffixed names.
+That is 378 numbered plots. A letter suffix (`10A`, `1A`) is an extra grave beside that number. Those extras are concentrated in B (7), with a few in C, D, E, and F. The map does not draw the suffix name inside the numbered square. It lists that person under “Not on a square” on the field page. A handful of numbers also carry two unsuffixed names.
 
 Fields J through O do not restart. Each row continues the previous row's numbers.
 
@@ -135,7 +135,7 @@ data/qa-issues.csv        # parse failures, conflicts, numbering flags
 web/index.html            # interactive map; open it from a local web server
 web/cemetery.json         # map data, rewritten by scripts/build_dataset.py
 scripts/build_pdf.py       # rebuilds the printable map from the CSVs
-print/chevra-ahavas-chesed.pdf
+print/chevra-ahavas-chesed.pdf  # generated; not committed
 ```
 
 Create `data/`, `web/`, and `print/` when that phase starts. Generated files should be reproducible from the CSV and the source image.
@@ -243,6 +243,8 @@ The running list is `open-questions.md`. Add a new item there when the lists do 
 
 ## Working rules
 
+- Commit after each step. A step is one coherent change to the data, the web map, or the printable map. Do not leave finished work uncommitted.
+- `print/chevra-ahavas-chesed.pdf` is rebuilt by `scripts/build_pdf.py` and is not committed. The two source PDFs stay in the repository.
 - Preserve every source string in a `*_raw` column.
 - Keep a person when the date or the location is incomplete.
 - Do not scrape Find a Grave.
