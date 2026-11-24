@@ -23,8 +23,30 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
 OUTPUT = ROOT / "print" / "chevra-ahavas-chesed.pdf"
 
-pdfmetrics.registerFont(TTFont("Body", r"C:\Windows\Fonts\arial.ttf"))
-pdfmetrics.registerFont(TTFont("Body-Bold", r"C:\Windows\Fonts\arialbd.ttf"))
+# Arial on Windows. Liberation Sans on the Ubuntu Actions runner; its metrics match Arial.
+FONT_CANDIDATES = (
+    (Path(r"C:\Windows\Fonts\arial.ttf"), Path(r"C:\Windows\Fonts\arialbd.ttf")),
+    (
+        Path("/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"),
+        Path("/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"),
+    ),
+    (
+        Path("/usr/share/fonts/truetype/liberation2/LiberationSans-Regular.ttf"),
+        Path("/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf"),
+    ),
+)
+
+
+def register_fonts() -> None:
+    for regular, bold in FONT_CANDIDATES:
+        if regular.is_file() and bold.is_file():
+            pdfmetrics.registerFont(TTFont("Body", str(regular)))
+            pdfmetrics.registerFont(TTFont("Body-Bold", str(bold)))
+            return
+    raise SystemExit("No usable font pair found. Expected Arial or Liberation Sans.")
+
+
+register_fonts()
 
 PAGE = landscape(letter)
 WIDTH, HEIGHT = PAGE

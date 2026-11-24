@@ -15,7 +15,9 @@ python scripts/build_dataset.py
 python scripts/build_pdf.py
 ```
 
-The dataset script needs `pdfplumber`. The PDF script needs `reportlab` and Arial (`C:\Windows\Fonts\arial.ttf` and `arialbd.ttf`). There is no requirements file.
+The dataset script needs `pdfplumber`. The PDF script needs `reportlab`, plus Arial on Windows or Liberation Sans on Linux. There is no requirements file.
+
+`.github/workflows/build.yml` runs those two scripts on every push and pull request. The job fails when a rebuild changes the committed CSVs or `web/cemetery.json`. It uploads `data/burials.csv`, `data/plots.csv`, `data/qa-issues.csv`, `web/cemetery.json`, and `print/chevra-ahavas-chesed.pdf` as artifacts, kept for 90 days. When the repository is public, that workflow also publishes `web/` to GitHub Pages at `https://hroskes.github.io/chevra-map/`. On the free plan, Pages runs from a public repository, so the deploy job stays off while this repository is private.
 
 The summary row in `data/qa-issues.csv` is the count to trust after a rebuild. The current file says: 1,547 Chevra rows from the master list, against the printed total of 1,545 as of 12/22/2022; 130 Rosedale rows; 74 rows from the 2020–2026 list that did not match a master row; 64 rows matched to both lists; 1,598 drawn on the working grid; 1,397 dates with an assumed century; 1,859 plot squares. The burial file has 1,751 rows: 1,614 Chevra, 130 Rosedale, 5 elsewhere, and 2 with no location. Sixteen Chevra rows are off the working grid. Twenty-four Chevra rows have a letter suffix; those people are listed under "Not on a square" rather than inside the numbered square. The plot file has 1,573 occupied squares and 286 empty squares, across 42 fields. The QA file has 59 rows, all `review`: 24 shared lots, 16 off-grid, 6 location conflicts, 6 spelling matches, 5 buried elsewhere, 1 near-name match (Harry / Harvey Honick), and the summary. No source line failed to parse.
 
@@ -144,6 +146,7 @@ AGENTS.md
 .cursor/rules/chevra-cemetery.mdc
 open-questions.md
 .gitignore
+.github/workflows/build.yml   # rebuild, artifacts, and GitHub Pages when public
 cemetery map.png
 list of departed since 2020 (11-10-26).pdf
 master list of departed poorly formatted.pdf
