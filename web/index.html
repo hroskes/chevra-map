@@ -26,7 +26,7 @@
       font: 16px/1.45 "Segoe UI", sans-serif;
     }
     header {
-      padding: 1.25rem 1.25rem 0.75rem;
+      padding: 0.85rem 1.25rem 0.65rem;
       border-bottom: 1px solid var(--line);
     }
     .eyebrow {
@@ -37,9 +37,9 @@
       color: var(--muted);
     }
     h1 {
-      margin: 0.15rem 0 0.6rem;
+      margin: 0.1rem 0 0.45rem;
       font-family: Georgia, "Palatino Linotype", serif;
-      font-size: 1.8rem;
+      font-size: 1.65rem;
       font-weight: 600;
     }
     .banner {
@@ -81,7 +81,7 @@
     .layout {
       display: grid;
       grid-template-columns: 15rem 1fr;
-      min-height: calc(100vh - 12rem);
+      min-height: calc(100vh - 10.5rem);
     }
     nav {
       padding: 0.8rem;
@@ -119,23 +119,135 @@
       border-radius: 4px;
       text-align: left;
     }
-    main { padding: 1rem 1.1rem 2rem; min-width: 0; }
-    .groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1rem; }
-    .group {
+    main { padding: 0.75rem 1.1rem 1.2rem; min-width: 0; }
+    .workspace {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .map-scroll {
+      overflow: auto;
+      max-height: calc(100vh - 14.5rem);
       background: white;
       border: 1px solid var(--line);
-      border-top: 6px solid var(--blue);
       border-radius: 8px;
-      padding: 0.8rem;
+      padding: 0.35rem 0.7rem 0.2rem;
     }
-    .group.late { border-top-color: var(--green); }
-    .group.double { border-top-color: var(--orange); }
-    .group.triple { border-top-color: var(--pink); }
-    .group h3 { margin: 0 0 0.4rem; font-family: Georgia, serif; font-size: 1.05rem; }
-    .group p { margin: 0 0 0.5rem; color: var(--muted); font-size: 0.88rem; }
+    .map-frame {
+      display: grid;
+      grid-template-columns: 1.4rem max-content max-content max-content;
+      column-gap: 0.45rem;
+      width: max-content;
+    }
+    .entrance { grid-column: 2; }
+    .far-end { grid-column: 3 / 5; }
+    .entrance, .far-end {
+      text-align: center;
+      font-size: 0.78rem;
+      padding: 0.05rem 0 0.15rem;
+    }
+    .entrance strong { display: block; font-size: 0.95rem; }
+    .entrance span, .far-end { color: var(--muted); }
+    .site {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: subgrid;
+      row-gap: 2px;
+      align-items: stretch;
+    }
+    .beth {
+      grid-column: 1;
+      grid-row: 1 / 22;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+    }
+    .shaari {
+      grid-column: 3 / 5;
+      grid-row: 1 / 11;
+      margin-left: 0.15rem;
+      background: #e3ebe2;
+      border: 1px solid #8b9786;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.3;
+    }
+    .shaari strong { color: var(--ink); font-size: 0.95rem; }
+    .map-field {
+      display: flex;
+      align-items: stretch;
+      gap: 3px;
+    }
+    .map-field-label {
+      flex: 0 0 2.35rem;
+      border: 0;
+      border-radius: 3px;
+      color: white;
+      font: inherit;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      padding: 0;
+    }
+    .map-field.single-early .map-field-label { background: var(--blue); }
+    .map-field.single-late .map-field-label { background: var(--green); }
+    .map-field.double .map-field-label { background: var(--orange); }
+    .map-field.triple .map-field-label { background: var(--pink); }
+    .map-plots {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1px;
+    }
+    .map-row { display: flex; gap: 1px; }
+    .plot {
+      position: relative;
+      width: 11px;
+      height: 8px;
+      padding: 0;
+      border: 0;
+      border-radius: 1px;
+      background: #f4efe4;
+      box-shadow: inset 0 0 0 1px rgba(36, 31, 26, 0.18);
+      cursor: pointer;
+    }
+    .plot.occupied { background: var(--occupied); box-shadow: none; }
+    .plot.shared { box-shadow: inset 0 0 0 2px #e6c27a; }
+    .plot.selected { outline: 2px solid var(--gold); outline-offset: 1px; z-index: 1; }
+    .plot:focus-visible, .map-field-label:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 1px;
+      z-index: 1;
+    }
+    .board {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: #fff8ea;
+      border: 1px solid var(--ink);
+      border-radius: 3px;
+      font-size: 0.72rem;
+      font-weight: 650;
+      line-height: 1.25;
+      margin-left: 2.55rem;
+    }
+    #map-detail:empty { display: none; }
+    #map-detail #detail { margin-top: 0; }
     .grid-head { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
     .grid-head h2 { margin: 0; font-family: Georgia, serif; }
-    .hint { color: var(--muted); font-size: 0.9rem; }
+    .hint { margin: 0; color: var(--muted); font-size: 0.9rem; }
     .rows { overflow-x: auto; padding-bottom: 0.4rem; }
     .row { display: flex; gap: 0.4rem; margin: 0.4rem 0; align-items: stretch; }
     .row-label {
@@ -170,7 +282,7 @@
     }
     #detail h3, .unplaced h3 { margin: 0 0 0.3rem; font-family: Georgia, serif; }
     .source { color: var(--muted); font-size: 0.85rem; white-space: pre-wrap; }
-    .legend { display: flex; gap: 1rem; margin: 0.4rem 0 0.8rem; font-size: 0.85rem; color: var(--muted); }
+    .legend { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 0; font-size: 0.85rem; color: var(--muted); }
     .swatch {
       display: inline-block;
       width: 0.8rem;
@@ -183,7 +295,8 @@
     .swatch.filled { background: var(--occupied); border-color: var(--occupied); }
     @media (max-width: 800px) {
       .layout { grid-template-columns: 1fr; }
-      nav { border-right: 0; border-bottom: 1px solid var(--line); }
+      main { order: 1; }
+      nav { order: 2; border-right: 0; border-top: 1px solid var(--line); }
     }
   </style>
 </head>
@@ -191,7 +304,7 @@
   <header>
     <p class="eyebrow">Liberty Road</p>
     <h1>Chevra Ahavas Chesed</h1>
-    <p class="banner">First schematic, not a survey. Row 1 is drawn toward the entrance. Lot 1 is on the left. KK is drawn after JJ, and LLL after KKK. An empty square has no name in the lists. It may still be reserved.</p>
+    <p class="banner">First schematic, not a survey. The map follows the source photo: entrance at the top, row 1 toward the entrance, lot 1 on the left. An empty square has no name in the lists. It may still be reserved. KK and LLL are in the field list, not on this page.</p>
     <label for="q">Find a person</label>
     <input id="q" type="search" placeholder="Last name or first name" autocomplete="off">
     <div id="results"></div>
@@ -205,6 +318,13 @@
     const navEl = document.querySelector("#nav");
     const mainEl = document.querySelector("#main");
     const searchEl = document.querySelector("#q");
+    const UPPER = "ABCDEFGHIJ".split("");
+    const LOWER = "KLMNOPQRS".split("");
+    const DOUBLE_SLOTS = "ABCDEFGH".split("").map((letter) => letter + letter)
+      .concat(["board"])
+      .concat(["I", "J"].map((letter) => letter + letter));
+    const TRIPLES = "ABCDEFGHIJK".split("").map((letter) => letter.repeat(3));
+
     let data = null;
     let byId = {};
     let selectedId = "";
@@ -269,33 +389,178 @@
       return showDetail(person.name, nodes);
     }
 
+    function lotDetail(code, row, plot) {
+      const names = peopleIn(plot.ids);
+      if (!names.length) {
+        return showDetail(
+          `Field ${code}, row ${row}, lot ${plot.lot}`,
+          [paragraph("No burial in the lists. We do not know if this lot is reserved.")]
+        );
+      }
+      if (names.length === 1) return personDetail(names[0]);
+      const nodes = names.flatMap((person) => [
+        paragraph(`${person.name} — ${dateLine(person)}`),
+        person.notes ? paragraph(person.notes, "source") : paragraph(""),
+      ]);
+      return showDetail(`Field ${code}, row ${row}, lot ${plot.lot}`, nodes);
+    }
+
+    function openPlot(code, row, plot, button) {
+      const names = peopleIn(plot.ids);
+      selectedId = names[0] ? names[0].id : "";
+      document.querySelectorAll(".plot.selected, .cell.selected").forEach((cell) => cell.classList.remove("selected"));
+      if (button) button.classList.add("selected");
+      const node = lotDetail(code, row, plot);
+      const slot = document.querySelector("#map-detail");
+      if (slot) slot.replaceChildren(node);
+      else {
+        const existing = document.querySelector("#detail");
+        if (existing) existing.remove();
+        mainEl.appendChild(node);
+      }
+    }
+
+    function fieldBlock(code) {
+      const field = data.fields.find((item) => item.code === code);
+      const block = document.createElement("div");
+      block.className = `map-field ${field.band}`;
+      const label = document.createElement("button");
+      label.type = "button";
+      label.className = "map-field-label";
+      label.textContent = code;
+      label.setAttribute("aria-label", `Open field ${code}`);
+      label.addEventListener("click", () => renderField(code));
+      const plots = document.createElement("div");
+      plots.className = "map-plots";
+      for (let row = 1; row <= 3; row += 1) {
+        const line = document.createElement("div");
+        line.className = "map-row";
+        data.plots
+          .filter((plot) => plot.field === code && plot.row === row && !plot.suffix)
+          .sort((a, b) => a.lot - b.lot)
+          .forEach((plot) => {
+            const button = document.createElement("button");
+            button.type = "button";
+            const names = peopleIn(plot.ids);
+            button.className = `plot${plot.status === "occupied" ? " occupied" : ""}${names.length > 1 ? " shared" : ""}`;
+            button.id = `lot-${code}-${row}-${plot.lot}`;
+            const who = names.map((person) => person.name).join(", ");
+            button.title = who
+              ? `${who} — field ${code}, row ${row}, lot ${plot.lot}`
+              : `No name — field ${code}, row ${row}, lot ${plot.lot}`;
+            button.setAttribute("aria-label", button.title);
+            if (names.some((person) => person.id === selectedId)) button.classList.add("selected");
+            button.addEventListener("click", () => openPlot(code, row, plot, button));
+            line.appendChild(button);
+          });
+        plots.appendChild(line);
+      }
+      block.append(label, plots);
+      return block;
+    }
+
+    function placeField(site, code, column, row) {
+      const block = fieldBlock(code);
+      block.style.gridColumn = String(column);
+      block.style.gridRow = String(row);
+      site.appendChild(block);
+    }
+
     function renderOverview() {
+      renderNav("");
       mainEl.replaceChildren();
-      const intro = paragraph("Choose a field, or search for a name. The entrance is the Liberty Road end. A is at that end, and S, JJ, and KKK are toward the far end on the source photo.");
-      mainEl.appendChild(intro);
-      const groups = document.createElement("div");
-      groups.className = "groups";
-      ["single-early", "single-late", "double", "triple"].forEach((band) => {
-        const [title, copy, kind] = bandTitle(band);
-        const card = document.createElement("section");
-        card.className = `group ${kind === "single-late" ? "late" : kind === "single-early" ? "" : kind}`;
-        const heading = document.createElement("h3");
-        heading.textContent = title;
-        card.appendChild(heading);
-        card.appendChild(paragraph(copy));
-        data.fields.filter((field) => field.band === band).forEach((field) => {
-          card.appendChild(fieldButton(field));
-        });
-        groups.appendChild(card);
+      const workspace = document.createElement("div");
+      workspace.className = "workspace";
+      workspace.appendChild(paragraph(
+        "Each square is a lot. The top row of a field is row 1, and the left square is lot 1. A field name opens that field.",
+        "hint"
+      ));
+      const legend = document.createElement("div");
+      legend.className = "legend";
+      legend.innerHTML = [
+        '<span><i class="swatch filled"></i>Burial in the lists</span>',
+        '<span><i class="swatch"></i>No name in the lists</span>',
+        '<span><i class="swatch" style="background:#1d5c86;border-color:#1d5c86"></i>A–J</span>',
+        '<span><i class="swatch" style="background:#2c6a3c;border-color:#2c6a3c"></i>K–S</span>',
+        '<span><i class="swatch" style="background:#c05612;border-color:#c05612"></i>AA–JJ</span>',
+        '<span><i class="swatch" style="background:#a33b62;border-color:#a33b62"></i>AAA–KKK</span>',
+      ].join("");
+      workspace.appendChild(legend);
+
+      const scroll = document.createElement("div");
+      scroll.className = "map-scroll";
+      const frame = document.createElement("div");
+      frame.className = "map-frame";
+
+      const entrance = document.createElement("div");
+      entrance.className = "entrance";
+      const road = document.createElement("strong");
+      road.textContent = "Liberty Rd";
+      const gate = document.createElement("span");
+      gate.textContent = "Entrance";
+      entrance.append(road, gate);
+      frame.appendChild(entrance);
+
+      const site = document.createElement("div");
+      site.className = "site";
+      const beth = document.createElement("div");
+      beth.className = "beth";
+      beth.textContent = "Beth El";
+      site.appendChild(beth);
+      const shaari = document.createElement("div");
+      shaari.className = "shaari";
+      const shaariName = document.createElement("strong");
+      shaariName.textContent = "Shaari Zion";
+      const shaariKind = document.createElement("span");
+      shaariKind.textContent = "Cemetery";
+      shaari.append(shaariName, shaariKind);
+      site.appendChild(shaari);
+
+      UPPER.forEach((code, index) => placeField(site, code, 2, index + 1));
+      LOWER.forEach((code, index) => placeField(site, code, 2, 11 + index));
+      DOUBLE_SLOTS.forEach((code, index) => {
+        const row = 11 + index;
+        if (code === "board") {
+          const board = document.createElement("div");
+          board.className = "board";
+          board.style.gridColumn = "3";
+          board.style.gridRow = String(row);
+          board.append("Plot listing", document.createElement("br"), "board");
+          site.appendChild(board);
+          return;
+        }
+        placeField(site, code, 3, row);
       });
-      mainEl.appendChild(groups);
+      TRIPLES.forEach((code, index) => placeField(site, code, 4, 11 + index));
+
+      frame.appendChild(site);
+      const far = document.createElement("div");
+      far.className = "far-end";
+      far.textContent = "Far end";
+      frame.appendChild(far);
+      scroll.appendChild(frame);
+
+      const detail = document.createElement("div");
+      detail.id = "map-detail";
+      workspace.appendChild(scroll);
+      workspace.appendChild(detail);
+      mainEl.appendChild(workspace);
+
       const drawn = data.people.filter((person) => person.onMap && !person.suffix).length;
       const others = data.people.filter((person) => person.cemetery !== "chevra");
       const off = data.people.filter((person) => person.cemetery === "chevra" && (!person.onMap || person.suffix));
       const extra = document.createElement("div");
       extra.className = "other-list";
-      extra.appendChild(paragraph(`${drawn} people are drawn on the grid. ${off.length} Chevra records are not on a square. ${others.length} records are Rosedale or another cemetery.`));
+      extra.appendChild(paragraph(
+        `${drawn} people are drawn on this map. ${off.length} Chevra records are not on a square. ${others.length} records are Rosedale or another cemetery. KK and LLL were added after the source photo, so they are left off this page and stay in the field list.`
+      ));
       mainEl.appendChild(extra);
+
+      if (selectedId && byId[selectedId] && byId[selectedId].onMap && !byId[selectedId].suffix) {
+        detail.appendChild(personDetail(byId[selectedId]));
+        const selected = scroll.querySelector(".plot.selected");
+        if (selected) selected.scrollIntoView({ block: "nearest", inline: "nearest" });
+      }
     }
 
     function fieldButton(field) {
@@ -377,30 +642,7 @@
             button.appendChild(who);
             if (person.id === selectedId) button.classList.add("selected");
           });
-          button.addEventListener("click", () => {
-            selectedId = "";
-            document.querySelectorAll(".cell.selected").forEach((cell) => cell.classList.remove("selected"));
-            button.classList.add("selected");
-            const names = peopleIn(plot.ids);
-            const existing = document.querySelector("#detail");
-            if (existing) existing.remove();
-            if (!names.length) {
-              mainEl.appendChild(showDetail(
-                `Field ${code}, row ${row}, lot ${plot.lot}`,
-                [paragraph("No burial in the lists. We do not know if this lot is reserved.")]
-              ));
-              return;
-            }
-            if (names.length === 1) {
-              mainEl.appendChild(personDetail(names[0]));
-              return;
-            }
-            const nodes = names.flatMap((person) => [
-              paragraph(`${person.name} — ${dateLine(person)}`),
-              person.notes ? paragraph(person.notes, "source") : paragraph(""),
-            ]);
-            mainEl.appendChild(showDetail(`Field ${code}, row ${row}, lot ${plot.lot}`, nodes));
-          });
+          button.addEventListener("click", () => openPlot(code, row, plot, button));
           line.appendChild(button);
         });
         rows.appendChild(line);
@@ -454,7 +696,8 @@
         button.textContent = `${person.name} — ${placeLine(person)}`;
         button.addEventListener("click", () => {
           selectedId = person.id;
-          if (person.field && person.cemetery === "chevra") renderField(person.field);
+          if (person.cemetery === "chevra" && person.field && person.onMap && !person.suffix) renderOverview();
+          else if (person.field && person.cemetery === "chevra") renderField(person.field);
           else {
             renderNav("");
             mainEl.replaceChildren(personDetail(person));
@@ -472,7 +715,6 @@
       .then((payload) => {
         data = payload;
         byId = Object.fromEntries(data.people.map((person) => [person.id, person]));
-        renderNav("");
         renderOverview();
         searchEl.addEventListener("input", renderResults);
       })
