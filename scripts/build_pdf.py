@@ -160,8 +160,8 @@ def draw_cover(pdf: canvas.Canvas, page: int) -> None:
     y = HEIGHT - 112
     paragraphs = [
         "A first map of the graves. The lot number on each square is the key used in the index. A filled square has a burial in the lists. An open square has no name in the lists. The lists do not say which of those empty lots are reserved.",
-        "The next page has the entrance at the top. In the upper part, A through J are on the left and Shaari Zion Cemetery runs beside them on the right. Left and right on that page are the reverse of left and right as you walk in. Lower down, K through S continue from A through J. AA through JJ and AAA through KKK are to the right, past the end of Shaari Zion. Each field is drawn the same height, so K lines up with AA and AAA. The plot listing board is one field tall, between HH and II, and so it sits beside S. II, JJ, JJJ, and KKK continue past S.",
-        "KK and LLL were added after that photo, so they are not on the overview. On each field page, row 1 is at the top, as the row closest to the entrance, and lot 1 is at the left. Those directions, and the row lengths, still need a visit.",
+        "The next page has the entrance at the top. In the upper part, A through J are on the left and Shaari Zion Cemetery runs beside them on the right. Left and right on that page are the reverse of left and right as you walk in. Lower down, K through S continue from A through J. AA through KK and AAA through LLL are to the right, past the end of Shaari Zion. Each field is drawn the same height, so K lines up with AA and AAA. The plot listing board is one field tall, between HH and II, and so it sits beside S. II, JJ, JJJ, and KKK continue past S, and KK and LLL continue one field farther.",
+        "KK and LLL were added after that photo. The overview draws KK after JJ and LLL after KKK, with a dashed edge, because that place is still an assumption. On each field page, row 1 is at the top, as the row closest to the entrance, and lot 1 is at the left. Those directions, and the row lengths, still need a visit.",
         "Fields J through O are numbered straight through the three rows. The other fields start again at 1 on each row. A person whose lot does not fall on that grid is named on the field page and in the list that follows the overview.",
     ]
     for paragraph in paragraphs:
@@ -171,13 +171,24 @@ def draw_cover(pdf: canvas.Canvas, page: int) -> None:
     pdf.showPage()
 
 
-def draw_stack(pdf: canvas.Canvas, x: float, top: float, step: float, w: float, color, labels: list[str]) -> None:
+def draw_stack(
+    pdf: canvas.Canvas,
+    x: float,
+    top: float,
+    step: float,
+    w: float,
+    color,
+    labels: list[str],
+    assumed: set[str] | None = None,
+) -> None:
+    assumed = assumed or set()
     for index, label in enumerate(labels):
         y = top - (index + 1) * step
         if label == "plot listing board":
             pdf.setFillColor(HexColor("#fff8ea"))
             pdf.setStrokeColor(INK)
             pdf.setLineWidth(0.9)
+            pdf.setDash()
             pdf.rect(x, y, w, step, fill=1, stroke=1)
             pdf.setFillColor(INK)
             pdf.setFont("Body-Bold", 6)
@@ -186,8 +197,14 @@ def draw_stack(pdf: canvas.Canvas, x: float, top: float, step: float, w: float, 
             continue
         pdf.setFillColor(color)
         pdf.setStrokeColor(white)
-        pdf.setLineWidth(0.8)
+        if label in assumed:
+            pdf.setLineWidth(1.3)
+            pdf.setDash(1.6, 1.4)
+        else:
+            pdf.setLineWidth(0.8)
+            pdf.setDash()
         pdf.rect(x, y, w, step, fill=1, stroke=1)
+        pdf.setDash()
         pdf.setFillColor(white)
         pdf.setFont("Body-Bold", 7)
         pdf.drawCentredString(x + w / 2, y + step / 2 - 2.5, label)
@@ -212,10 +229,10 @@ def draw_overview(pdf: canvas.Canvas, fields: list[str], page: int) -> None:
         12,
     )
 
-    blue = list("ABCDEFGHIJ")
-    green = list("KLMNOPQRS")
-    orange = [letter * 2 for letter in "ABCDEFGH"] + ["plot listing board"] + [letter * 2 for letter in "IJ"]
-    pink = [letter * 3 for letter in "ABCDEFGHIJK"]
+    blue = UPPER
+    green = LOWER
+    orange = DOUBLE_SLOTS
+    pink = TRIPLES
 
     step = 18
     col_w = 64
@@ -243,8 +260,8 @@ def draw_overview(pdf: canvas.Canvas, fields: list[str], page: int) -> None:
 
     draw_stack(pdf, sx, top, step, col_w, BANDS["single-early"], blue)
     draw_stack(pdf, sx, split, step, col_w, BANDS["single-late"], green)
-    draw_stack(pdf, ox, split, step, col_w, BANDS["double"], orange)
-    draw_stack(pdf, px, split, step, col_w, BANDS["triple"], pink)
+    draw_stack(pdf, ox, split, step, col_w, BANDS["double"], orange, ASSUMED_FIELDS)
+    draw_stack(pdf, px, split, step, col_w, BANDS["triple"], pink, ASSUMED_FIELDS)
 
     pad = 4
     pdf.setStrokeColor(HexColor("#9a1c1c"))
@@ -278,8 +295,8 @@ def draw_overview(pdf: canvas.Canvas, fields: list[str], page: int) -> None:
     swatches = [
         (BANDS["single-early"], "Blue: A–J, from the entrance"),
         (BANDS["single-late"], "Green: K–S, continuing from J"),
-        (BANDS["double"], "Orange: AA–JJ, to the right of K–S"),
-        (BANDS["triple"], "Pink: AAA–KKK, farther right"),
+        (BANDS["double"], "Orange: AA–KK, to the right of K–S"),
+        (BANDS["triple"], "Pink: AAA–LLL, farther right"),
     ]
     y = HEIGHT - 130
     for color, label in swatches:
@@ -291,7 +308,7 @@ def draw_overview(pdf: canvas.Canvas, fields: list[str], page: int) -> None:
         y -= 20
     wrapped(
         pdf,
-        "Each field is the same height. K lines up with AA and AAA. The plot listing board is one field tall, between HH and II, so it sits beside S. II, JJ, JJJ, and KKK continue past S. The source legend extends the bands through Z, ZZ, and ZZZ. The burial lists stop at S, JJ, and KKK. KK and LLL were added later, so this page leaves them off.",
+        "Each field is the same height. K lines up with AA and AAA. The plot listing board is one field tall, between HH and II, so it sits beside S. II, JJ, JJJ, and KKK continue past S, and KK and LLL continue one field farther. KK and LLL are drawn with a dashed edge because that place is still an assumption. The source legend extends the bands through Z, ZZ, and ZZZ. The burial lists use A–S, AA–JJ, and AAA–KKK, plus the later KK and LLL graves.",
         MARGIN,
         y - 6,
         sx - 90 - MARGIN,
@@ -369,11 +386,13 @@ def draw_missing(pdf: canvas.Canvas, burials: list[dict], page: int) -> int:
 UPPER = list("ABCDEFGHIJ")
 LOWER = list("KLMNOPQRS")
 SINGLES = UPPER + LOWER
-DOUBLE_FIELDS = [letter * 2 for letter in "ABCDEFGHIJ"]
-TRIPLES = [letter * 3 for letter in "ABCDEFGHIJK"]
+DOUBLE_FIELDS = [letter * 2 for letter in "ABCDEFGHIJ"] + ["KK"]
+TRIPLES = [letter * 3 for letter in "ABCDEFGHIJK"] + ["LLL"]
 BOARD = "plot listing board"
+ASSUMED_FIELDS = {"KK", "LLL"}
 # Equal field height, lower section starting together at K, AA, and AAA.
 # The board is one field between HH and II, which puts it beside S.
+# KK follows JJ, and LLL follows KKK. That place is still an open assumption.
 DOUBLE_SLOTS = DOUBLE_FIELDS[:8] + [BOARD] + DOUBLE_FIELDS[8:]
 
 
@@ -437,25 +456,22 @@ def directions(field: str) -> tuple[str, str, str, str]:
             slot = LOWER.index(field)
             right = phrase([DOUBLE_SLOTS[slot], TRIPLES[slot]])
         return up, down, "Beth El", right
-    if field == "KK":
-        up = phrase(list(reversed(DOUBLE_SLOTS)) + ["Shaari Zion"])
-        return up, "far end", "Beth El", ""
     if len(field) == 2:
         slot = DOUBLE_SLOTS.index(field)
         up = phrase(list(reversed(DOUBLE_SLOTS[:slot])) + ["Shaari Zion"])
-        down = "far end" if field == "JJ" else phrase(DOUBLE_SLOTS[slot + 1:])
+        down = "far end" if slot + 1 == len(DOUBLE_SLOTS) else phrase(DOUBLE_SLOTS[slot + 1:])
         if slot < len(LOWER):
             left = phrase([LOWER[slot], "Beth El"])
         else:
             left = "Beth El"
-        right = TRIPLES[slot]
+        right = TRIPLES[slot] if slot < len(TRIPLES) else ""
         return up, down, left, right
-    if field == "LLL":
-        return phrase(list(reversed(TRIPLES)) + ["Shaari Zion"]), "far end", "", ""
     slot = TRIPLES.index(field)
     up = phrase(list(reversed(TRIPLES[:slot])) + ["Shaari Zion"])
-    down = "far end" if field == "KKK" else phrase(TRIPLES[slot + 1:])
-    left_items = [DOUBLE_SLOTS[slot]]
+    down = "far end" if slot + 1 == len(TRIPLES) else phrase(TRIPLES[slot + 1:])
+    left_items = []
+    if slot < len(DOUBLE_SLOTS):
+        left_items.append(DOUBLE_SLOTS[slot])
     if slot < len(LOWER):
         left_items.append(LOWER[slot])
     left_items.append("Beth El")

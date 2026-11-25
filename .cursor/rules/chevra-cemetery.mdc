@@ -25,7 +25,7 @@ Leave these bytes unchanged: `cemetery map.png`, `master list of departed poorly
 - Fields in the master list: A–S, AA–JJ, AAA–KKK.
 - A–I restart each row. Lengths: A 14, B 12, C 12, D 13, E 14, F 14, G 16, H 16, I 15.
 - J–O do not restart. K is 14 per row (1–42). L–O are 16 per row (1–48). J matches K except a few stray lines. Keep the printed lot.
-- KK and LLL may appear on the first schematic under the assumptions in `open-questions.md`. Those placements stay unconfirmed.
+- The schematic draws KK after JJ and LLL after KKK. That place stays unconfirmed. See `open-questions.md`.
 - Lot status is `occupied`, `empty`, or `reserved`. Use `reserved` only when Stanley or the cemetery named that lot.
 
 ## Records

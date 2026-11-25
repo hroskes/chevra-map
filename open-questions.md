@@ -16,7 +16,7 @@ These are in force for `data/`, `web/`, and `print/`. None of them is confirmed 
 
 3. **The printable overview follows the source photo, with the entrance at the top.** In the upper part, blue A–J is on the left and Shaari Zion Cemetery parallels it on the right. Green K–S continues straight down from J. Orange AA–JJ and pink AAA–KKK are to the right of K–S, starting where Shaari Zion ends. Each field is drawn the same height, so K lines up with AA and AAA. The plot listing board is one field tall between HH and II, which puts it beside S, and II, JJ, JJJ, and KKK continue past S. The photo itself shows the bands ending together; this equal-height reading is unconfirmed. Fields T–Z are not drawn. The source legend extends those bands through Z, ZZ, and ZZZ; the burial lists stop at S, JJ, and KKK.
 
-4. **KK and LLL are not on the printable overview.** They were added after the photo, so page 2 leaves them off and each has its own field page. You asked for KK between JJ and AAA, and LLL after KKK. That is still unconfirmed. The interactive map still lists KK after JJ and LLL after KKK. Question 6.
+4. **KK is drawn after JJ, and LLL after KKK.** Both continue one field past the source photo, toward the far end, and they line up with each other. The source photo does not label either field. The maps mark that place as assumed: a dashed edge on the overview, and “place assumed” on the field page. Question 6 is still open.
 
 5. **Row lengths, used as the grid even where a visit may find more empty lots.** Numbering restarts at 1 each row, except J–O.
 
@@ -127,7 +127,7 @@ Stand in one field whose occupants we trust, such as field A or field L, and rec
 
 ## 6. Where are fields KK and LLL?
 
-- Status: open. The printable overview leaves KK and LLL off, because they are not on the source photo. The interactive map still lists KK after JJ and LLL after KKK. See assumption 4.
+- Status: open. The maps draw KK directly after JJ, and LLL directly after KKK, both toward the far end. That place is still unconfirmed. See assumption 4.
 - How to answer: visit, or Stanley if he has a current field diagram.
 
 Neither field is labeled on `cemetery map.png`. LLL was added after that image. KK appears only in the 2025–2026 burials (the master list stops at JJ and KKK). The later list uses both, so the graves exist. We need the walk order: KK relative to JJ, LLL relative to KKK, and whether each row has 14 lots.

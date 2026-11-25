@@ -157,7 +157,7 @@
     }
     .beth {
       grid-column: 1;
-      grid-row: 1 / 22;
+      grid-row: 1 / 23;
       writing-mode: vertical-rl;
       transform: rotate(180deg);
       display: flex;
@@ -204,6 +204,7 @@
     .map-field.single-late .map-field-label { background: var(--green); }
     .map-field.double .map-field-label { background: var(--orange); }
     .map-field.triple .map-field-label { background: var(--pink); }
+    .map-field.assumed .map-field-label { border: 1px dashed white; }
     .map-plots {
       display: flex;
       flex-direction: column;
@@ -304,7 +305,7 @@
   <header>
     <p class="eyebrow">Liberty Road</p>
     <h1>Chevra Ahavas Chesed</h1>
-    <p class="banner">First schematic, not a survey. The map follows the source photo: entrance at the top, row 1 toward the entrance, lot 1 on the left. An empty square has no name in the lists. It may still be reserved. KK and LLL are in the field list, not on this page.</p>
+    <p class="banner">First schematic, not a survey. The map follows the source photo: entrance at the top, row 1 toward the entrance, lot 1 on the left. An empty square has no name in the lists. It may still be reserved. KK is drawn after JJ, and LLL after KKK. That place is still an assumption.</p>
     <label for="q">Find a person</label>
     <input id="q" type="search" placeholder="Last name or first name" autocomplete="off">
     <div id="results"></div>
@@ -322,8 +323,8 @@
     const LOWER = "KLMNOPQRS".split("");
     const DOUBLE_SLOTS = "ABCDEFGH".split("").map((letter) => letter + letter)
       .concat(["board"])
-      .concat(["I", "J"].map((letter) => letter + letter));
-    const TRIPLES = "ABCDEFGHIJK".split("").map((letter) => letter.repeat(3));
+      .concat(["I", "J", "K"].map((letter) => letter + letter));
+    const TRIPLES = "ABCDEFGHIJKL".split("").map((letter) => letter.repeat(3));
 
     let data = null;
     let byId = {};
@@ -332,8 +333,8 @@
     function bandTitle(band) {
       if (band === "single-early") return ["A–J", "Single letters from the entrance. Shaari Zion is beside them.", "single-early"];
       if (band === "single-late") return ["K–S", "Single letters continuing from J.", "single-late"];
-      if (band === "double") return ["AA–KK", "Double letters. KK, after JJ, is assumed.", "double"];
-      return ["AAA–LLL", "Triple letters. LLL, after KKK, is assumed.", "triple"];
+      if (band === "double") return ["AA–KK", "Double letters. KK is drawn after JJ. That place is assumed.", "double"];
+      return ["AAA–LLL", "Triple letters. LLL is drawn after KKK. That place is assumed.", "triple"];
     }
 
     function peopleIn(ids) {
@@ -423,12 +424,12 @@
     function fieldBlock(code) {
       const field = data.fields.find((item) => item.code === code);
       const block = document.createElement("div");
-      block.className = `map-field ${field.band}`;
+      block.className = `map-field ${field.band}${field.assumed ? " assumed" : ""}`;
       const label = document.createElement("button");
       label.type = "button";
       label.className = "map-field-label";
       label.textContent = code;
-      label.setAttribute("aria-label", `Open field ${code}`);
+      label.setAttribute("aria-label", field.assumed ? `Open field ${code}, place assumed` : `Open field ${code}`);
       label.addEventListener("click", () => renderField(code));
       const plots = document.createElement("div");
       plots.className = "map-plots";
@@ -482,8 +483,8 @@
         '<span><i class="swatch"></i>No name in the lists</span>',
         '<span><i class="swatch" style="background:#1d5c86;border-color:#1d5c86"></i>A–J</span>',
         '<span><i class="swatch" style="background:#2c6a3c;border-color:#2c6a3c"></i>K–S</span>',
-        '<span><i class="swatch" style="background:#c05612;border-color:#c05612"></i>AA–JJ</span>',
-        '<span><i class="swatch" style="background:#a33b62;border-color:#a33b62"></i>AAA–KKK</span>',
+        '<span><i class="swatch" style="background:#c05612;border-color:#c05612"></i>AA–KK</span>',
+        '<span><i class="swatch" style="background:#a33b62;border-color:#a33b62"></i>AAA–LLL</span>',
       ].join("");
       workspace.appendChild(legend);
 
@@ -552,7 +553,7 @@
       const extra = document.createElement("div");
       extra.className = "other-list";
       extra.appendChild(paragraph(
-        `${drawn} people are drawn on this map. ${off.length} Chevra records are not on a square. ${others.length} records are Rosedale or another cemetery. KK and LLL were added after the source photo, so they are left off this page and stay in the field list.`
+        `${drawn} people are drawn on this map. ${off.length} Chevra records are not on a square. ${others.length} records are Rosedale or another cemetery. The dashed labels on KK and LLL mark a place that is still an assumption.`
       ));
       mainEl.appendChild(extra);
 
